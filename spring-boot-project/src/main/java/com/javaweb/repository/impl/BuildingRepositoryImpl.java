@@ -22,9 +22,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 	public List<Map<String, Object>> findAll(Map<String, Object> params) {
 		String sql = "SELECT\r\n"
 				+ "  b.name,\r\n"
-				+ "  b.street,\r\n"
-				+ "  b.ward,\r\n"
-				+ "  d.name,\r\n"
+				+ "  CONCAT_WS(\", \", b.street, b.ward, d.name) AS address,\r\n"
 				+ "  b.numberofbasement,\r\n"
 				+ "  b.managername,\r\n"
 				+ "  b.managerphonenumber,\r\n"
@@ -36,8 +34,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				+ "FROM\r\n"
 				+ "  building b\r\n"
 				+ "  JOIN district d ON b.districtid = d.id\r\n"
-				+ "  JOIN rentarea r ON b.id = r.buildingid\r\n"
-				+ "  JOIN assignmentbuilding asb on b.id = asb.buildingid\n";
+				+ "  JOIN rentarea r ON b.id = r.buildingid\r\n";
 
 		String condition = "WHERE 1 = 1";
 		String groupBy = "\nGROUP BY b.id";
@@ -77,7 +74,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 					break;
 					
 				case "staffId":
-					condition += "\n\tAND asb.staffid = " + entry.getValue();
+					condition += "\n\tAND b.id IN (SELECT buildingid from assignmentbuilding ab where ab.staffid = " + entry.getValue() + ")";
 				}
 		}
 
@@ -98,6 +95,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 					Object value = rs.getObject(key);
 					result.put(key, value);
 				}
+				result.put("unusedArea", null);
 				results.add(result);
 			}
 		} catch (SQLException ex) {

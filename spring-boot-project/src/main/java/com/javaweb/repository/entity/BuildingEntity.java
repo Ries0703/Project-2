@@ -1,7 +1,5 @@
 package com.javaweb.repository.entity;
 
-import java.time.LocalDateTime;
-
 public class BuildingEntity {
 	private long id;
 	private String name;
@@ -30,8 +28,8 @@ public class BuildingEntity {
 	private String linkOfBuilding;
 	private String map;
 	private String image;
-	private LocalDateTime createdDate;
-	private LocalDateTime modifiedDate;
+	private String createdDate;
+	private String modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
 	private String managerName;
@@ -253,19 +251,19 @@ public class BuildingEntity {
 		this.image = image;
 	}
 
-	public LocalDateTime getCreatedDate() {
+	public String getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(LocalDateTime createdDate) {
+	public void setCreatedDate(String createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	public LocalDateTime getModifiedDate() {
+	public String getModifiedDate() {
 		return modifiedDate;
 	}
 
-	public void setModifiedDate(LocalDateTime modifiedDate) {
+	public void setModifiedDate(String modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
 
@@ -300,4 +298,5 @@ public class BuildingEntity {
 	public void setManagerPhoneNumber(String managerPhoneNumber) {
 		this.managerPhoneNumber = managerPhoneNumber;
 	}
+
 }
