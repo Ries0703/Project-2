@@ -1,6 +1,5 @@
 package com.javaweb.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,22 +18,9 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public List<BuildingDTO> findAll(Map<String, Object> params) {
+		List<BuildingEntity> entities = buildingRepository.findAll(params);
 		return null;
 	}
 
-	@Override
-	public List<BuildingEntity> create(List<BuildingDTO> buildingDTO) {
-		return null;
-	}
-
-	private List<BuildingEntity> dtoToEntity(List<BuildingDTO> buildingDTOs) {
-		return null;
-	}
-
-	@Override
-	public String delete(List<Long> ids) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
