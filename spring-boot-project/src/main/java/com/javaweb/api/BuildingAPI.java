@@ -24,24 +24,9 @@ import com.javaweb.service.dto.BuildingDTO;
 public class BuildingAPI {
 	@Autowired
 	BuildingService buildingService;
-
 	@GetMapping
 	public List<BuildingDTO> getBuilding(@RequestParam Map<String, Object> params) {
 		List<BuildingDTO> results = buildingService.findAll(params);
 		return results;
 	}
-
-	@PostMapping
-	public ResponseEntity<?> createBuilding(@RequestBody List<BuildingDTO> buildingDTO) {
-		List<BuildingEntity> created = buildingService.create(buildingDTO);
-		return ResponseEntity.status(HttpStatus.CREATED).body(created);
-	}
-	
-	@DeleteMapping
-	public ResponseEntity<?> deleteBuilding(@PathVariable List<Long> ids) {
-		
-		
-		return null;
-	}
-	
 }

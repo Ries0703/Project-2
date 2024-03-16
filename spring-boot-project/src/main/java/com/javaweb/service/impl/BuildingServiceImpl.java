@@ -19,39 +19,22 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public List<BuildingDTO> findAll(Map<String, Object> params) {
-		List<BuildingEntity> buildingEntities = buildingRepository.findAll(params);
-		List<BuildingDTO> buildingDTOs = new ArrayList<>();
-		for (BuildingEntity item : buildingEntities) {
-			BuildingDTO dto = new BuildingDTO();
-			dto.setName(item.getName());
-			dto.setAddress(item.getStreet() + ", " + item.getWard() + ", " + item.getDistrictId());
-			dto.setManagerName(item.getManagerName());
-			buildingDTOs.add(dto);
-		}
-		return buildingDTOs;
+		return null;
 	}
 
 	@Override
 	public List<BuildingEntity> create(List<BuildingDTO> buildingDTO) {
-		return buildingRepository.save(dtoToEntity(buildingDTO));
+		return null;
 	}
 
 	private List<BuildingEntity> dtoToEntity(List<BuildingDTO> buildingDTOs) {
-		List<BuildingEntity> converted = new ArrayList<>();
-		for (BuildingDTO buildingDTO : buildingDTOs) {
-			BuildingEntity insert = new BuildingEntity();
-			insert.setName(buildingDTO.getName());
-			String[] addressFields = buildingDTO.getAddress().split("\\s*,\\s*");
-			insert.setStreet(addressFields[0]);
-			insert.setWard(addressFields[1]);
-			insert.setDistrictId(Long.parseLong(addressFields[2]));
-			converted.add(insert);
-		}
-		return converted;
+		return null;
 	}
 
 	@Override
 	public String delete(List<Long> ids) {
-		return buildingRepository.delete(ids);
+		// TODO Auto-generated method stub
+		return null;
 	}
+
 }
