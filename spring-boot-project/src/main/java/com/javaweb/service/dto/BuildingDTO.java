@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BuildingDTO {
 	private String name;
-	private String address; 
+	private String address;
 	private Integer numberOfBasement;
 	private String managerName;
 	private String managerPhoneNumber;
