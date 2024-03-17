@@ -77,7 +77,17 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				}
 			}
 		}
+		boolean typeCodeUnuseable = true;
 		if (typeCode != null && typeCode.size() != 0) {
+			for (String str : typeCode) {              
+				if (str != null && !str.equals("")) {
+					typeCodeUnuseable = false;
+					break;
+				}
+			}
+		}
+		
+		if (!typeCodeUnuseable) {
 			join += "\nJOIN buildingrenttype brt ON brt.buildingid = b.id"
 				  + "\nJOIN renttype rt ON brt.id = rt.id AND (1 = 1";
 			for (String str : typeCode) {              
