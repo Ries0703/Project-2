@@ -19,6 +19,21 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCode) {
+		for (Map.Entry<String, Object> entry : params.entrySet()) {
+			switch(entry.getKey()) {
+				case "floorArea":
+				case "areaFrom":
+				case "areaTo":
+				case "rentPriceFrom":
+				case "rentPriceTo":
+				case "numberOfBasement":
+					if (!entry.getValue().toString().trim().matches("-?\\d+(\\.\\d+)?")) {
+						throw new NumberFormatException();
+					}
+					break;
+			}
+		}
+		
 		List<Map<String, Object>> maps = buildingRepository.findAll(params, typeCode);
 		List<BuildingDTO> converted = new ArrayList<>();
 		for (Map<String, Object> mp : maps) {

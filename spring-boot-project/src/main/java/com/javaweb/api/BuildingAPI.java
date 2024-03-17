@@ -13,14 +13,15 @@ import com.javaweb.service.BuildingService;
 import com.javaweb.service.dto.BuildingDTO;
 
 @RestController
-@RequestMapping(value = "api/building/")
+@RequestMapping(value = "api/buildings/")
 public class BuildingAPI {
 	@Autowired
 	BuildingService buildingService;
 	@GetMapping
 	public List<BuildingDTO> getBuilding(@RequestParam Map<String, Object> params,
-			@RequestParam(value = "typeCode") List<String> typeCode) {
+			@RequestParam(value = "typeCode", required = false) List<String> typeCode) {
 		List<BuildingDTO> results = buildingService.findAll(params, typeCode);
+		
 		return results;
 	}
 }
