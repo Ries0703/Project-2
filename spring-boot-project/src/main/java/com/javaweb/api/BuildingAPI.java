@@ -18,8 +18,9 @@ public class BuildingAPI {
 	@Autowired
 	BuildingService buildingService;
 	@GetMapping
-	public List<BuildingDTO> getBuilding(@RequestParam Map<String, Object> params) {
-		List<BuildingDTO> results = buildingService.findAll(params);
+	public List<BuildingDTO> getBuilding(@RequestParam Map<String, Object> params,
+			@RequestParam(value = "typeCode") List<String> typeCode) {
+		List<BuildingDTO> results = buildingService.findAll(params, typeCode);
 		return results;
 	}
 }

@@ -19,7 +19,7 @@ import com.javaweb.utils.ConnectionUtil;
 public class BuildingRepositoryImpl implements BuildingRepository {
 
 	@Override
-	public List<Map<String, Object>> findAll(Map<String, Object> params) {
+	public List<Map<String, Object>> findAll(Map<String, Object> params, List<String> typeCode) {
 		String sql = "SELECT\r\n"
 				+ "  b.name,\r\n"
 				+ "  CONCAT_WS(\", \", b.street, b.ward, d.name) AS address,\r\n"
@@ -75,9 +75,19 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 					
 				case "staffId":
 					condition += "\n\tAND b.id IN (SELECT buildingid from assignmentbuilding ab where ab.staffid = " + entry.getValue() + ")";
+					break;
 				}
 		}
-
+		if (typeCode != null && typeCode.size() != 0) {
+			condition += "\n\tAND b.id IN (SELECT brt.buildingid FROM buildingrenttype brt\r\n"
+					+ "                  JOIN renttype rt ON brt.renttypeid = rt.id\r\n"
+					+ "                  WHERE 1 = 1 ";
+			for (String str : typeCode) {
+				condition += "OR rt.code LIKE '%" + str + "%'\n";
+			}
+			condition += ")\n";
+					
+		}
 		sql += condition + groupBy + ";";
 		System.out.println(sql);
 		
@@ -95,7 +105,6 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 					Object value = rs.getObject(key);
 					result.put(key, value);
 				}
-				result.put("unusedArea", null);
 				results.add(result);
 			}
 		} catch (SQLException ex) {

@@ -18,8 +18,8 @@ public class BuildingServiceImpl implements BuildingService {
 	private BuildingRepository buildingRepository;
 
 	@Override
-	public List<BuildingDTO> findAll(Map<String, Object> params) {
-		List<Map<String, Object>> maps = buildingRepository.findAll(params);
+	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCode) {
+		List<Map<String, Object>> maps = buildingRepository.findAll(params, typeCode);
 		List<BuildingDTO> converted = new ArrayList<>();
 		for (Map<String, Object> mp : maps) {
 			converted.add(mapToDto(mp));
@@ -31,10 +31,6 @@ public class BuildingServiceImpl implements BuildingService {
 		BuildingDTO dto = new BuildingDTO();
 
 		for (Map.Entry<String, Object> entry : data.entrySet()) {
-			if (entry.getValue() == null) {
-				continue;
-			}
-
 			String key = entry.getKey();
 			Object value = entry.getValue();
 
@@ -46,7 +42,7 @@ public class BuildingServiceImpl implements BuildingService {
 				dto.setAddress((String) value);
 				break;
 			case "numberofbasement":
-				dto.setNumberOfBasement(Integer.valueOf(value.toString()));
+				dto.setNumberOfBasement((Integer) (value));
 				break;
 			case "managername":
 				dto.setManagerName((String) value);
@@ -55,19 +51,19 @@ public class BuildingServiceImpl implements BuildingService {
 				dto.setManagerPhoneNumber((String) value);
 				break;
 			case "floorarea":
-				dto.setFloorArea(Integer.valueOf(value.toString()));
+				dto.setFloorArea((Integer) (value));
 				break;
 			case "rentareas":
 				dto.setRentAreas((String) value);
 				break;
 			case "brokagefee":
-				dto.setBrokageFee(Double.valueOf(value.toString()));
+				dto.setBrokageFee((Double) (value));
 				break;
 			case "servicefee":
-				dto.setServiceFee(String.valueOf(value.toString()));
+				dto.setServiceFee((String) value);
 				break;
 			case "rentprice":
-				dto.setRentPrice(Integer.valueOf(value.toString()));
+				dto.setRentPrice((Integer) (value));
 				break;
 			}
 		}
