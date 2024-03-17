@@ -94,6 +94,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				ResultSet rs = stm.executeQuery();) {
 			while (rs.next()) {
 				BuildingEntity building = new BuildingEntity();
+				building.setId(rs.getLong("id"));
 				building.setName(rs.getString("name"));
 				building.setStreet(rs.getString("street"));
 				building.setWard(rs.getString("ward"));
@@ -102,7 +103,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				building.setManagerName(rs.getString("managername"));
 				building.setManagerPhoneNumber(rs.getString("managerphonenumber"));
 				building.setFloorArea(rs.getInt("floorarea"));
-				building.setBrokerageFee(rs.getDouble("brokagefee"));
+				building.setBrokerageFee(rs.getDouble("brokeragefee"));
 				building.setServiceFee(rs.getString("servicefee"));
 				building.setRentPrice(rs.getInt("rentprice"));
 				results.add(building);

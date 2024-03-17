@@ -20,10 +20,10 @@ public class DistrictRepositoryImpl implements DistrictRepository {
 	@Override
 	public List<DistrictEntity> findAll(List<BuildingEntity> buildings) {
 		StringBuilder sql = new StringBuilder("SELECT\r\n" + "  *\r\n" + "FROM\r\n" + "  district");
-		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND buildingid IN (");
+		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND id IN (");
 
 		for (BuildingEntity entity : buildings) {
-			condition.append(entity.getId()).append(", ");
+			condition.append(entity.getDistrictId()).append(", ");
 		}
 		condition.delete(condition.length() - 2, condition.length());
 		condition.append(")");
