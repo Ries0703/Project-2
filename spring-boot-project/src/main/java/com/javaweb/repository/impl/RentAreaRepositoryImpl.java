@@ -19,34 +19,47 @@ public class RentAreaRepositoryImpl implements RentAreaRepository {
 
 	@Override
 	public List<RentAreaEntity> findAll(List<BuildingEntity> buildings) {
-		StringBuilder sql = new StringBuilder("SELECT\r\n" + "  *\r\n" + "FROM\r\n" + "  rentarea");
-		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND buildingid IN (");
-
-		for (BuildingEntity entity : buildings) {
-			condition.append(entity.getId()).append(", ");
-		}
-		condition.delete(condition.length() - 2, condition.length());
-		condition.append(")");
-
-		sql.append(condition);
+		String sql = makeSQLSelectRentArea(buildings);
 		System.out.println(sql);
-		List<RentAreaEntity> results = new ArrayList<>();
+
 		try (Connection con = ConnectionUtil.getConnection();
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
-			while (rs.next()) {
-				RentAreaEntity ra = new RentAreaEntity();
-				ra.setId(rs.getLong("id"));
-				ra.setValue(rs.getInt("value"));
-				ra.setBuildingId(rs.getLong("buildingid"));
-				results.add(ra);
-			}
+			return resultSetToEntities(rs);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
 		}
 
+	}
+
+	private List<RentAreaEntity> resultSetToEntities(ResultSet rs) throws SQLException {
+		List<RentAreaEntity> results = new ArrayList<>();
+		while (rs.next()) {
+			RentAreaEntity ra = new RentAreaEntity();
+			ra.setId(rs.getLong("id"));
+			ra.setValue(rs.getInt("value"));
+			ra.setBuildingId(rs.getLong("buildingid"));
+			results.add(ra);
+		}
 		return results;
 	}
 
+	private String makeSQLSelectRentArea(List<BuildingEntity> buildings) {
+		StringBuilder sql = new StringBuilder("SELECT\r\n" + "  *\r\n" + "FROM\r\n" + "  rentarea");
+		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND buildingid IN (");
+
+		for (int i = 0; i < buildings.size(); i++) {
+			condition.append(buildings.get(i).getId());
+			if (i == buildings.size() - 1) {
+				condition.append(")");
+				break;
+			}
+			condition.append(", ");
+
+		}
+
+		sql.append(condition);
+		return sql.toString();
+	}
 }

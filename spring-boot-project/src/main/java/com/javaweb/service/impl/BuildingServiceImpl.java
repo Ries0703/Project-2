@@ -1,6 +1,7 @@
 package com.javaweb.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,6 @@ import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.DistrictRepository;
 import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.repository.entity.BuildingEntity;
-import com.javaweb.repository.entity.DistrictEntity;
 import com.javaweb.repository.entity.RentAreaEntity;
 import com.javaweb.service.BuildingService;
 import com.javaweb.service.dto.BuildingDTO;
@@ -29,48 +29,40 @@ public class BuildingServiceImpl implements BuildingService {
 	@Override
 	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCodes) {
 		inputValidate(params);
-
 		List<BuildingEntity> buildings = buildingRepository.findAll(params, typeCodes);
-		List<DistrictEntity> districts = districtRepository.findAll(buildings);
-		List<RentAreaEntity> rentAreas = rentAreaRepository.findAll(buildings);
-
-		List<BuildingDTO> converted = new ArrayList<>();
-
-		for (BuildingEntity b : buildings) {
-			BuildingDTO dto = new BuildingDTO();
-			StringBuilder address = new StringBuilder(b.getStreet() + ", " + b.getWard() + ", ");
-			for (DistrictEntity de : districts) {
-				if (de.getId() == b.getDistrictId()) {
-					address.append(de.getName());
-					break;
-				}
-			}
-			StringBuilder areas = new StringBuilder();
-			for (RentAreaEntity ra : rentAreas) {
-				if (ra.getBuildingId() == b.getId()) {
-					areas.append(ra.getValue()).append(", ");
-				}
-			}
-			areas.delete(areas.length() - 2, areas.length());
-
-			dto.setName(b.getName());
-			dto.setAddress(address.toString());
-			dto.setNumberOfBasement(b.getNumberOfBasement());
-			dto.setManagerName(b.getManagerName());
-			dto.setManagerPhoneNumber(b.getManagerPhoneNumber());
-			dto.setFloorArea(b.getFloorArea());
-//			dto.setUnusedArea(null);
-			dto.setRentAreas(areas.toString());
-			dto.setBrokageFee(b.getBrokerageFee());
-			dto.setServiceFee(b.getServiceFee());
-			dto.setRentPrice(b.getRentPrice());
-			converted.add(dto);
+		List<BuildingDTO> dtos = new ArrayList<>();
+		for (BuildingEntity entity : buildings) {
+			dtos.add(entityToDto(entity, new BuildingDTO())); // dependency injection applied :D
 		}
-
-		return converted;
+		return dtos;
 	}
 
-	private static void inputValidate(Map<String, Object> params) {
+	private BuildingDTO entityToDto(BuildingEntity b, BuildingDTO dto) {
+		String address = b.getStreet() + ", " + b.getWard() + ", "
+				+ districtRepository.findAll(Arrays.asList(b)).get(0).getName();
+		List<RentAreaEntity> rentAreas = rentAreaRepository.findAll(Arrays.asList(b));
+		String areas = "";
+		for (int i = 0; i < rentAreas.size(); i++) {
+			areas += rentAreas.get(i).getValue();
+			if (i == rentAreas.size() - 1)
+				break;
+			areas += ", ";
+		}
+		dto.setName(b.getName());
+		dto.setAddress(address.toString());
+		dto.setNumberOfBasement(b.getNumberOfBasement());
+		dto.setManagerName(b.getManagerName());
+		dto.setManagerPhoneNumber(b.getManagerPhoneNumber());
+		dto.setFloorArea(b.getFloorArea());
+		dto.setUnusedArea(null);
+		dto.setRentAreas(areas.toString());
+		dto.setBrokageFee(b.getBrokerageFee());
+		dto.setServiceFee(b.getServiceFee());
+		dto.setRentPrice(b.getRentPrice());
+		return dto;
+	}
+
+	private void inputValidate(Map<String, Object> params) {
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
 			switch (entry.getKey()) {
 			case "floorArea":

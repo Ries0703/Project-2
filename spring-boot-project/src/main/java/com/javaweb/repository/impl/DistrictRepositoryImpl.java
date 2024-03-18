@@ -19,37 +19,40 @@ public class DistrictRepositoryImpl implements DistrictRepository {
 
 	@Override
 	public List<DistrictEntity> findAll(List<BuildingEntity> buildings) {
-		StringBuilder sql = new StringBuilder("SELECT\r\n" + "  *\r\n" + "FROM\r\n" + "  district");
-		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND id IN (");
-		List<DistrictEntity> results = new ArrayList<>();
-		
-		
-		
-		for (BuildingEntity entity : buildings) {
-				condition.append(entity.getDistrictId()).append(", ");
-		}
-		condition.delete(condition.length() - 2, condition.length());
-		condition.append(")");
-
-		sql.append(condition);
+		String sql = makeSQLSelectDistrict(buildings);
 		System.out.println(sql);
 		
 		try (Connection con = ConnectionUtil.getConnection();
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
-			while (rs.next()) {
-				DistrictEntity de = new DistrictEntity();
-				de.setId(rs.getLong("id"));
-				de.setCode(rs.getString("code"));
-				de.setName(rs.getString("name"));
-				results.add(de);
-			}
+			return resultSetToEntities(rs);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
 		}
-
+	}
+	
+	private List<DistrictEntity> resultSetToEntities(ResultSet rs) throws SQLException {
+		List<DistrictEntity> results = new ArrayList<>();
+		while (rs.next()) {
+			DistrictEntity de = new DistrictEntity();
+			de.setId(rs.getLong("id"));
+			de.setCode(rs.getString("code"));
+			de.setName(rs.getString("name"));
+			results.add(de);
+		}
 		return results;
 	}
-
+	
+	private String makeSQLSelectDistrict(List<BuildingEntity> buildings) {
+		StringBuilder sql = new StringBuilder("SELECT\r\n" + "  *\r\n" + "FROM\r\n" + "  district");
+		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND id IN (");
+		for (BuildingEntity entity : buildings) {
+				condition.append(entity.getDistrictId()).append(", ");
+		}
+		condition.delete(condition.length() - 2, condition.length());
+		condition.append(")");
+		sql.append(condition);
+		return sql.toString();
+	}
 }
