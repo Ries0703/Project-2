@@ -19,8 +19,9 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 	@Override
 	public List<BuildingEntity> findAll(Map<String, Object> params, List<String> typeCode) {
-		String sql = "SELECT DISTINCT\r\n"
-				+ "  b.id,\r\n"
+		String operation = "SELECT ";
+		String distinct = "";
+		String columns = "  b.id,\r\n"
 				+ "  b.name,\r\n"
 				+ "  b.street,\r\n"
 				+ "  b.ward,\r\n"
@@ -65,6 +66,8 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				break;
 			case "staffId":
 				join += "\nJOIN assignmentbuilding asb ON b.id = asb.buildingid AND asb.staffid = " + entry.getValue();
+				distinct = "DISTINCT";
+				break;
 			case "areaFrom": case "areaTo":
 				if (!joinedRentArea) {
 					joinedRentArea = true;
@@ -75,6 +78,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				} else if (entry.getKey().equals("areaTo")) {
 					join += " AND ra.value <= " + entry.getValue();
 				}
+				distinct = "DISTINCT";
 			}
 		}
 		boolean typeCodeUnuseable = true;
@@ -88,6 +92,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		}
 		
 		if (!typeCodeUnuseable) {
+			distinct = "DISTINCT";
 			join += "\nJOIN buildingrenttype brt ON brt.buildingid = b.id"
 				  + "\nJOIN renttype rt ON brt.id = rt.id AND (1 = 1";
 			for (String str : typeCode) {              
@@ -95,7 +100,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			}
 			join += ")";
 		}
-		sql += join + condition + ";";
+		String sql = operation + distinct + columns + join + condition + ";";
 		System.out.println(sql);
 
 		List<BuildingEntity> results = new ArrayList<>();
