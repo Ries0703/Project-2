@@ -22,7 +22,6 @@ public class BuildingAPI {
 	public List<BuildingDTO> getBuilding(@RequestParam Map<String, Object> params,
 			@RequestParam(value = "typeCode", required = false) List<String> typeCodes) {
 		List<BuildingDTO> results = buildingService.findAll(params, typeCodes);
-
 		return results;
 	}
 }

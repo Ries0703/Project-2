@@ -21,7 +21,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 	public List<BuildingEntity> findAll(Map<String, Object> params, List<String> typeCode) {
 		String operation = "SELECT ";
 		String distinct = "";
-		String columns = "  b.id,\r\n"
+		String columns = "\r\n  b.id,\r\n"
 				+ "  b.name,\r\n"
 				+ "  b.street,\r\n"
 				+ "  b.ward,\r\n"
@@ -38,6 +38,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 		String condition = "\nWHERE 1 = 1";
 		String join = "";
+		
 		boolean joinedRentArea = false;
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
 			if (entry.getValue() == null || entry.getValue().toString().trim().equals("")) {
@@ -81,6 +82,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				distinct = "DISTINCT";
 			}
 		}
+		
 		boolean typeCodeUnuseable = true;
 		if (typeCode != null && typeCode.size() != 0) {
 			for (String str : typeCode) {              
@@ -100,6 +102,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			}
 			join += ")";
 		}
+		
 		String sql = operation + distinct + columns + join + condition + ";";
 		System.out.println(sql);
 

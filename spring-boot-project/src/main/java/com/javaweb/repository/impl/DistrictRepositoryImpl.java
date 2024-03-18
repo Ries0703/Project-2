@@ -23,18 +23,11 @@ public class DistrictRepositoryImpl implements DistrictRepository {
 		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND id IN (");
 		List<DistrictEntity> results = new ArrayList<>();
 		
-		long previousId = -1;
+		
+		
 		for (BuildingEntity entity : buildings) {
-			if (-1 != previousId && entity.getDistrictId() == previousId) continue;
-			
-			previousId = entity.getDistrictId();
-			condition.append(previousId).append(", ");
+				condition.append(entity.getDistrictId()).append(", ");
 		}
-		
-//		for (BuildingEntity entity : buildings) {
-//			condition.append(entity.getDistrictId()).append(", ");
-//		}
-		
 		condition.delete(condition.length() - 2, condition.length());
 		condition.append(")");
 
