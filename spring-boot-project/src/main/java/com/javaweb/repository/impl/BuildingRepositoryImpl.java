@@ -43,6 +43,11 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 				+ "  b.managerphonenumber,\r\n" + "  b.floorarea,\r\n" + "  b.brokeragefee,\r\n" + "  b.servicefee,\r\n"
 				+ "  b.rentprice\r\n" + "FROM\r\n" + "  building b";
 		
+		if (!join.trim().equals("")) {
+			distinct = "DISTINCT";
+		}
+		
+		
 		StringBuilder sql = operation.append(distinct).append(columns).append(join).append(condition);
 		return sql.toString();
 	}
