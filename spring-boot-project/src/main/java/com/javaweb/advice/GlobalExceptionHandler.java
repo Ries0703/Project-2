@@ -19,7 +19,8 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(value = { NumberFormatException.class })
 	public ResponseEntity<?> handleNumberFormatException(NumberFormatException ex) {
-		Map<String, String> error = new LinkedHashMap<>();
+		Map<String, Object> error = new LinkedHashMap<>();
+		error.put("status", HttpStatus.BAD_REQUEST);
 		error.put("error", "not a number");
 		error.put("detail", "expect numbers in numeric fields");
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);

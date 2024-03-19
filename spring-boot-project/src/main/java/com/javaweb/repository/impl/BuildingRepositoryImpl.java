@@ -52,7 +52,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 	}
 
 	private String makeSQLWhere(Map<String, Object> params, List<String> typeCode) {
-		StringBuilder condition = new StringBuilder();
+		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 ");
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
 			if (entry.getValue() == null || entry.getValue().toString().trim().equals("")) {
 				continue;
