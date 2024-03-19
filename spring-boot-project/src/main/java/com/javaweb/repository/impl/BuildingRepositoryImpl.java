@@ -37,21 +37,20 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		String distinct = "";
 		String condition = makeSQLWhere(params, typeCode);
 		String join = makeSQLJoin(params, typeCode);
-		
-		String columns = "\r\n  b.id,\r\n" + "  b.name,\r\n" + "  b.street,\r\n"
-				+ "  b.ward,\r\n" + "  b.districtid,\r\n" + "  b.numberofbasement,\r\n" + "  b.managername,\r\n"
+
+		String columns = "\r\n  b.id,\r\n" + "  b.name,\r\n" + "  b.street,\r\n" + "  b.ward,\r\n"
+				+ "  b.districtid,\r\n" + "  b.numberofbasement,\r\n" + "  b.managername,\r\n"
 				+ "  b.managerphonenumber,\r\n" + "  b.floorarea,\r\n" + "  b.brokeragefee,\r\n" + "  b.servicefee,\r\n"
 				+ "  b.rentprice\r\n" + "FROM\r\n" + "  building b";
-		
+
 		if (!join.trim().equals("")) {
 			distinct = "DISTINCT";
 		}
-		
-		
+
 		StringBuilder sql = operation.append(distinct).append(columns).append(join).append(condition);
 		return sql.toString();
 	}
-	
+
 	private String makeSQLWhere(Map<String, Object> params, List<String> typeCode) {
 		StringBuilder condition = new StringBuilder();
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
@@ -83,7 +82,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		}
 		return condition.toString();
 	}
-	
+
 	private String makeSQLJoin(Map<String, Object> params, List<String> typeCode) {
 		StringBuilder join = new StringBuilder();
 		boolean joinedRentArea = false;
