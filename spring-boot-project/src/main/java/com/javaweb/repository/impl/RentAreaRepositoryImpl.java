@@ -10,7 +10,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.javaweb.repository.RentAreaRepository;
-import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.repository.entity.RentAreaEntity;
 import com.javaweb.utils.ConnectionUtil;
 
@@ -18,14 +17,22 @@ import com.javaweb.utils.ConnectionUtil;
 public class RentAreaRepositoryImpl implements RentAreaRepository {
 
 	@Override
-	public List<RentAreaEntity> findAll(List<BuildingEntity> buildings) {
-		String sql = makeSQLSelectRentArea(buildings);
+	public String findAll(long buildingId) {
+		String sql = makeSQLSelectRentArea(buildingId);
 		System.out.println(sql);
 
 		try (Connection con = ConnectionUtil.getConnection();
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
-			return resultSetToEntities(rs);
+			List<RentAreaEntity> rentAreas = resultSetToEntities(rs);
+			String areas = "";
+			for (int i = 0; i < rentAreas.size(); i++) {
+				areas += rentAreas.get(i).getValue();
+				if (i == rentAreas.size() - 1)
+					break;
+				areas += ", ";
+			}
+			return areas;
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
@@ -45,20 +52,9 @@ public class RentAreaRepositoryImpl implements RentAreaRepository {
 		return results;
 	}
 
-	private String makeSQLSelectRentArea(List<BuildingEntity> buildings) {
+	private String makeSQLSelectRentArea(long buildingId) {
 		StringBuilder sql = new StringBuilder("SELECT\r\n" + "  *\r\n" + "FROM\r\n" + "  rentarea");
-		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND buildingid IN (");
-
-		for (int i = 0; i < buildings.size(); i++) {
-			condition.append(buildings.get(i).getId());
-			if (i == buildings.size() - 1) {
-				condition.append(")");
-				break;
-			}
-			condition.append(", ");
-
-		}
-
+		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND buildingid = " + buildingId);
 		sql.append(condition);
 		return sql.toString();
 	}

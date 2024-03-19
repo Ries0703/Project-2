@@ -1,7 +1,6 @@
 package com.javaweb.service.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.DistrictRepository;
 import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.repository.entity.BuildingEntity;
-import com.javaweb.repository.entity.RentAreaEntity;
 import com.javaweb.service.BuildingService;
 import com.javaweb.service.dto.BuildingDTO;
 
@@ -39,15 +37,8 @@ public class BuildingServiceImpl implements BuildingService {
 
 	private BuildingDTO entityToDto(BuildingEntity b, BuildingDTO dto) {
 		String address = b.getStreet() + ", " + b.getWard() + ", "
-				+ districtRepository.findAll(Arrays.asList(b)).get(0).getName();
-		List<RentAreaEntity> rentAreas = rentAreaRepository.findAll(Arrays.asList(b));
-		String areas = "";
-		for (int i = 0; i < rentAreas.size(); i++) {
-			areas += rentAreas.get(i).getValue();
-			if (i == rentAreas.size() - 1)
-				break;
-			areas += ", ";
-		}
+				+ districtRepository.findAll(b.getDistrictId()).get(0).getName();
+		String areas = rentAreaRepository.findAll(b.getId());
 		dto.setName(b.getName());
 		dto.setAddress(address.toString());
 		dto.setNumberOfBasement(b.getNumberOfBasement());

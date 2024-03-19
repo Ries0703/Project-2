@@ -19,11 +19,22 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 	@Override
 	public List<BuildingEntity> findAll(Map<String, Object> params, List<String> typeCode) {
-		String sql = makeSQLSelectBuilding(params, typeCode);
+		StringBuilder operation = new StringBuilder("SELECT ");
+		String distinct = "";
+		String condition = makeSQLWhere(params, typeCode);
+		String join = makeSQLJoin(params, typeCode);
+		String columns = "\r\n  b.id,\r\n" + "  b.name,\r\n" + "  b.street,\r\n" + "  b.ward,\r\n"
+				+ "  b.districtid,\r\n" + "  b.numberofbasement,\r\n" + "  b.managername,\r\n"
+				+ "  b.managerphonenumber,\r\n" + "  b.floorarea,\r\n" + "  b.brokeragefee,\r\n" + "  b.servicefee,\r\n"
+				+ "  b.rentprice\r\n" + "FROM\r\n" + "  building b";
+		if (!join.trim().equals("")) {
+			distinct = "DISTINCT";
+		}
+		StringBuilder sql = operation.append(distinct).append(columns).append(join).append(condition);
 		System.out.println(sql);
 
 		try (Connection con = ConnectionUtil.getConnection();
-				PreparedStatement stm = con.prepareStatement(sql);
+				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
 			return resultSetToBuildingEntities(rs);
 		} catch (SQLException ex) {
@@ -32,24 +43,6 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		}
 	}
 
-	private String makeSQLSelectBuilding(Map<String, Object> params, List<String> typeCode) {
-		StringBuilder operation = new StringBuilder("SELECT ");
-		String distinct = "";
-		String condition = makeSQLWhere(params, typeCode);
-		String join = makeSQLJoin(params, typeCode);
-
-		String columns = "\r\n  b.id,\r\n" + "  b.name,\r\n" + "  b.street,\r\n" + "  b.ward,\r\n"
-				+ "  b.districtid,\r\n" + "  b.numberofbasement,\r\n" + "  b.managername,\r\n"
-				+ "  b.managerphonenumber,\r\n" + "  b.floorarea,\r\n" + "  b.brokeragefee,\r\n" + "  b.servicefee,\r\n"
-				+ "  b.rentprice\r\n" + "FROM\r\n" + "  building b";
-
-		if (!join.trim().equals("")) {
-			distinct = "DISTINCT";
-		}
-
-		StringBuilder sql = operation.append(distinct).append(columns).append(join).append(condition);
-		return sql.toString();
-	}
 
 	private String makeSQLWhere(Map<String, Object> params, List<String> typeCode) {
 		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 ");

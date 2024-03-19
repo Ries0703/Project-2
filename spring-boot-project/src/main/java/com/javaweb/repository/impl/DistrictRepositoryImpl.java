@@ -10,7 +10,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.javaweb.repository.DistrictRepository;
-import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.repository.entity.DistrictEntity;
 import com.javaweb.utils.ConnectionUtil;
 
@@ -18,8 +17,8 @@ import com.javaweb.utils.ConnectionUtil;
 public class DistrictRepositoryImpl implements DistrictRepository {
 
 	@Override
-	public List<DistrictEntity> findAll(List<BuildingEntity> buildings) {
-		String sql = makeSQLSelectDistrict(buildings);
+	public List<DistrictEntity> findAll(long districtId) {
+		String sql = makeSQLSelectDistrict(districtId);
 		System.out.println(sql);
 		
 		try (Connection con = ConnectionUtil.getConnection();
@@ -44,14 +43,9 @@ public class DistrictRepositoryImpl implements DistrictRepository {
 		return results;
 	}
 	
-	private String makeSQLSelectDistrict(List<BuildingEntity> buildings) {
+	private String makeSQLSelectDistrict(long districtId) {
 		StringBuilder sql = new StringBuilder("SELECT\r\n" + "  *\r\n" + "FROM\r\n" + "  district");
-		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND id IN (");
-		for (BuildingEntity entity : buildings) {
-				condition.append(entity.getDistrictId()).append(", ");
-		}
-		condition.delete(condition.length() - 2, condition.length());
-		condition.append(")");
+		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND id = " + districtId);
 		sql.append(condition);
 		return sql.toString();
 	}
