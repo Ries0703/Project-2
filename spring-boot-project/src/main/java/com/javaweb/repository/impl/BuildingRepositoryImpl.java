@@ -23,10 +23,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		String distinct = "";
 		String condition = makeSQLWhere(params, typeCode);
 		String join = makeSQLJoin(params, typeCode);
-		String columns = "\r\n  b.id,\r\n" + "  b.name,\r\n" + "  b.street,\r\n" + "  b.ward,\r\n"
-				+ "  b.districtid,\r\n" + "  b.numberofbasement,\r\n" + "  b.managername,\r\n"
-				+ "  b.managerphonenumber,\r\n" + "  b.floorarea,\r\n" + "  b.brokeragefee,\r\n" + "  b.servicefee,\r\n"
-				+ "  b.rentprice\r\n" + "FROM\r\n" + "  building b";
+		String columns = "\r\n  b.*\r\nFROM building b";
 		if (!join.trim().equals("")) {
 			distinct = "DISTINCT";
 		}
@@ -42,7 +39,6 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			return null;
 		}
 	}
-
 
 	private String makeSQLWhere(Map<String, Object> params, List<String> typeCode) {
 		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 ");
@@ -71,7 +67,20 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			case "rentPriceTo":
 				condition.append("\n\tAND b.rentprice" + " <= " + entry.getValue());
 				break;
+			case "staffId":
+				condition.append("\n\tAND asb.staffid = " + entry.getValue());
+				break;
+			case "areaFrom":
+				condition.append("\n\tAND ra.value >= " + entry.getValue());
+				break;
+			case "areaTo":
+				condition.append("\n\tAND ra.value <= " + entry.getValue());
+				break;
 			}
+		}
+
+		if (typeCodeUsable(typeCode)) {
+			typeCode.stream().forEach(str -> condition.append("\nOR rt.code LIKE '%" + str.trim() + "%'"));
 		}
 		return condition.toString();
 	}
@@ -85,8 +94,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			}
 			switch (entry.getKey()) {
 			case "staffId":
-				join.append(
-						"\nJOIN assignmentbuilding asb ON b.id = asb.buildingid AND asb.staffid = " + entry.getValue());
+				join.append("\nJOIN assignmentbuilding asb ON b.id = asb.buildingid");
 				break;
 			case "areaFrom":
 			case "areaTo":
@@ -94,31 +102,20 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 					joinedRentArea = true;
 					join.append("\nJOIN rentarea ra ON b.id = ra.buildingid");
 				}
-				if (entry.getKey().equals("areaFrom")) {
-					join.append("\n\tAND ra.value >= " + entry.getValue());
-				} else if (entry.getKey().equals("areaTo")) {
-					join.append("\n\tAND ra.value <= " + entry.getValue());
-				}
 			}
 		}
-		boolean typeCodeUnuseable = true;
-		if (typeCode != null && typeCode.size() != 0) {
-			for (String str : typeCode) {
-				if (str != null && !str.equals("")) {
-					typeCodeUnuseable = false;
-					break;
-				}
-			}
-		}
-		if (!typeCodeUnuseable) {
-			join.append("\nJOIN buildingrenttype brt ON brt.buildingid = b.id"
-					+ "\nJOIN renttype rt ON brt.id = rt.id AND (1 = 1");
-			for (String str : typeCode) {
-				join.append("\nOR rt.code LIKE '%" + str + "%'");
-			}
-			join.append(")");
+
+		if (typeCodeUsable(typeCode)) {
+			join.append(
+					"\nJOIN buildingrenttype brt ON brt.buildingid = b.id" + "\nJOIN renttype rt ON brt.id = rt.id");
 		}
 		return join.toString();
+	}
+
+	private boolean typeCodeUsable(List<String> typeCodes) {
+		if (typeCodes == null || typeCodes.size() == 0)
+			return false;
+		return typeCodes.stream().filter(typeCode -> typeCode != null && !typeCode.trim().equals("")).count() > 0;
 	}
 
 	private List<BuildingEntity> resultSetToBuildingEntities(ResultSet rs) throws SQLException {
