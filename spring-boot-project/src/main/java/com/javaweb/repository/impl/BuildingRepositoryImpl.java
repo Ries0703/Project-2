@@ -115,7 +115,10 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 	private boolean typeCodeUsable(List<String> typeCodes) {
 		if (typeCodes == null || typeCodes.size() == 0)
 			return false;
-		return typeCodes.stream().filter(typeCode -> typeCode != null && !typeCode.trim().equals("")).count() > 0;
+		return typeCodes.stream()
+				.filter(typeCode -> typeCode != null && !typeCode.trim()
+				.equals(""))
+				.count() > 0;
 	}
 
 	private List<BuildingEntity> resultSetToBuildingEntities(ResultSet rs) throws SQLException {

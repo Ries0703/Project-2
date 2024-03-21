@@ -37,8 +37,8 @@ public class BuildingServiceImpl implements BuildingService {
 
 	private BuildingDTO entityToDto(BuildingEntity b, BuildingDTO dto) {
 		String address = b.getStreet() + ", " + b.getWard() + ", "
-				+ districtRepository.findAll(b.getDistrictId()).get(0).getName();
-		String areas = rentAreaRepository.findAll(b.getId());
+				+ districtRepository.getById(b.getDistrictId()).getName();
+		String areas = rentAreaRepository.getByBuildingId(b.getId());
 		dto.setName(b.getName());
 		dto.setAddress(address.toString());
 		dto.setNumberOfBasement(b.getNumberOfBasement());

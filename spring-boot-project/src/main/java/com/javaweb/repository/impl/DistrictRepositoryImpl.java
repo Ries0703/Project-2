@@ -17,14 +17,14 @@ import com.javaweb.utils.ConnectionUtil;
 public class DistrictRepositoryImpl implements DistrictRepository {
 
 	@Override
-	public List<DistrictEntity> findAll(long districtId) {
+	public DistrictEntity getById(long districtId) {
 		String sql = makeSQLSelectDistrict(districtId);
 		System.out.println(sql);
 		
 		try (Connection con = ConnectionUtil.getConnection();
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
-			return resultSetToEntities(rs);
+			return resultSetToEntities(rs).get(0);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
