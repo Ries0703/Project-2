@@ -120,6 +120,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 	private List<BuildingEntity> resultSetToBuildingEntities(ResultSet rs) throws SQLException {
 		List<BuildingEntity> results = new ArrayList<>();
+		
 		while (rs.next()) {
 			BuildingEntity building = new BuildingEntity();
 			building.setId(rs.getLong("id"));

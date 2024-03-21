@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import com.javaweb.repository.RentAreaRepository;
@@ -25,19 +27,13 @@ public class RentAreaRepositoryImpl implements RentAreaRepository {
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
 			List<RentAreaEntity> rentAreas = resultSetToEntities(rs);
-			String areas = "";
-			for (int i = 0; i < rentAreas.size(); i++) {
-				areas += rentAreas.get(i).getValue();
-				if (i == rentAreas.size() - 1)
-					break;
-				areas += ", ";
-			}
-			return areas;
+			  return StringUtils.join(rentAreas.stream()
+					  						.map(o -> o.getValue().toString())
+					  						.collect(Collectors.toList()), ',');
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
 		}
-
 	}
 
 	private List<RentAreaEntity> resultSetToEntities(ResultSet rs) throws SQLException {

@@ -1,8 +1,8 @@
 package com.javaweb.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,14 +28,13 @@ public class BuildingServiceImpl implements BuildingService {
 	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCodes) {
 		inputValidate(params);
 		List<BuildingEntity> buildings = buildingRepository.findAll(params, typeCodes);
-		List<BuildingDTO> dtos = new ArrayList<>();
-		for (BuildingEntity entity : buildings) {
-			dtos.add(entityToDto(entity, new BuildingDTO())); // dependency injection applied :D
-		}
-		return dtos;
+		return buildings.stream()
+				.map(building -> entityToDto(building))
+				.collect(Collectors.toList());
 	}
 
-	private BuildingDTO entityToDto(BuildingEntity b, BuildingDTO dto) {
+	private BuildingDTO entityToDto(BuildingEntity b) {
+		BuildingDTO dto = new BuildingDTO();
 		String address = b.getStreet() + ", " + b.getWard() + ", "
 				+ districtRepository.getById(b.getDistrictId()).getName();
 		String areas = rentAreaRepository.getByBuildingId(b.getId());
