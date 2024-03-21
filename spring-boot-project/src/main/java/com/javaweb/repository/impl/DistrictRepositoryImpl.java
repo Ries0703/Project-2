@@ -18,9 +18,10 @@ public class DistrictRepositoryImpl implements DistrictRepository {
 
 	@Override
 	public DistrictEntity getById(long districtId) {
+
 		String sql = makeSQLSelectDistrict(districtId);
 		System.out.println(sql);
-		
+
 		try (Connection con = ConnectionUtil.getConnection();
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
@@ -31,7 +32,7 @@ public class DistrictRepositoryImpl implements DistrictRepository {
 			return null;
 		}
 	}
-	
+
 	private List<DistrictEntity> resultSetToEntities(ResultSet rs) throws SQLException {
 		List<DistrictEntity> results = new ArrayList<>();
 		while (rs.next()) {
@@ -43,7 +44,7 @@ public class DistrictRepositoryImpl implements DistrictRepository {
 		}
 		return results;
 	}
-	
+
 	private String makeSQLSelectDistrict(long districtId) {
 		StringBuilder sql = new StringBuilder("SELECT\r\n" + "  *\r\n" + "FROM\r\n" + "  district");
 		StringBuilder condition = new StringBuilder("\nWHERE 1 = 1 AND id = " + districtId);

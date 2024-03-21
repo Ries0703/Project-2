@@ -26,10 +26,7 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCodes) {
-		inputValidate(params);
-		List<BuildingEntity> buildings = buildingRepository.findAll(params, typeCodes);
-		return buildings.stream()
-				.map(building -> entityToDto(building))
+		return buildingRepository.findAll(params, typeCodes).stream().map(building -> entityToDto(building))
 				.collect(Collectors.toList());
 	}
 
@@ -52,20 +49,4 @@ public class BuildingServiceImpl implements BuildingService {
 		return dto;
 	}
 
-	private void inputValidate(Map<String, Object> params) {
-		for (Map.Entry<String, Object> entry : params.entrySet()) {
-			switch (entry.getKey()) {
-			case "floorArea":
-			case "areaFrom":
-			case "areaTo":
-			case "rentPriceFrom":
-			case "rentPriceTo":
-			case "numberOfBasement":
-				if (!entry.getValue().toString().trim().matches("-?\\d+(\\.\\d+)?")) {
-					throw new NumberFormatException();
-				}
-				break;
-			}
-		}
-	}
 }

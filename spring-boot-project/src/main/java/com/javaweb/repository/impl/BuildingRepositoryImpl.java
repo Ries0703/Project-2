@@ -19,6 +19,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 
 	@Override
 	public List<BuildingEntity> findAll(Map<String, Object> params, List<String> typeCode) {
+		inputValidate(params);
 		StringBuilder operation = new StringBuilder("SELECT ");
 		String distinct = "";
 		String condition = makeSQLWhere(params, typeCode);
@@ -138,5 +139,24 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			results.add(building);
 		}
 		return results;
+	}
+	private static void inputValidate(Map<String, Object> params) {
+		for (Map.Entry<String, Object> entry : params.entrySet()) {
+			if (entry.getValue() == null || entry.getValue().toString().trim().equals("")) {
+				continue;
+			}
+			switch (entry.getKey()) {
+			case "floorArea":
+			case "areaFrom":
+			case "areaTo":
+			case "rentPriceFrom":
+			case "rentPriceTo":
+			case "numberOfBasement":
+				if (!entry.getValue().toString().trim().matches("-?\\d+(\\.\\d+)?")) {
+					throw new NumberFormatException();
+				}
+				break;
+			}
+		}
 	}
 }
