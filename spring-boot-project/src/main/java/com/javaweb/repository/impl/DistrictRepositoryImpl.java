@@ -24,7 +24,8 @@ public class DistrictRepositoryImpl implements DistrictRepository {
 		try (Connection con = ConnectionUtil.getConnection();
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
-			return resultSetToEntities(rs).get(0);
+			List<DistrictEntity> results = resultSetToEntities(rs);
+			return results.isEmpty() ? null : results.get(0);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
