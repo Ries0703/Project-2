@@ -27,9 +27,9 @@ public class RentAreaRepositoryImpl implements RentAreaRepository {
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
 			List<RentAreaEntity> rentAreas = resultSetToEntities(rs);
-			  return StringUtils.join(rentAreas.stream()
-					  						.map(o -> o.getValue().toString())
-					  						.collect(Collectors.toList()), ',');
+			return StringUtils.join(rentAreas.stream()
+											.map(o -> o.getValue().toString())
+											.collect(Collectors.toList()), ',');
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			return null;
