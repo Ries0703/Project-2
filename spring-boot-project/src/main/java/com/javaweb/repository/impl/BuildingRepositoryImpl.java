@@ -132,7 +132,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		}
 
 		if (StringUtil.usableTypeCode(typeCode)) {
-			typeCode.stream().forEach(str -> where.append("\nOR rt.code LIKE '%" + str.trim() + "%'"));
+			typeCode.forEach(str -> where.append("\nOR rt.code LIKE '%" + str.trim() + "%'"));
 		}
 	}
 
