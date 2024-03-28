@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.DistrictRepository;
 import com.javaweb.repository.RentAreaRepository;
-import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.service.BuildingService;
 import com.javaweb.service.dto.BuildingDTO;
+import com.javaweb.utils.ConvertUtil;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
@@ -26,27 +26,9 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCodes) {
-		return buildingRepository.findAll(params, typeCodes).stream().map(building -> entityToDto(building))
+		return buildingRepository.findAll(params, typeCodes).stream()
+				.map(building -> ConvertUtil.entityToDto(building, districtRepository, rentAreaRepository))
 				.collect(Collectors.toList());
-	}
-
-	private BuildingDTO entityToDto(BuildingEntity b) {
-		BuildingDTO dto = new BuildingDTO();
-		String address = b.getStreet() + ", " + b.getWard() + ", "
-				+ districtRepository.getById(b.getDistrictId()).getName();
-		String areas = rentAreaRepository.getByBuildingId(b.getId());
-		dto.setName(b.getName());
-		dto.setAddress(address.toString());
-		dto.setNumberOfBasement(b.getNumberOfBasement());
-		dto.setManagerName(b.getManagerName());
-		dto.setManagerPhoneNumber(b.getManagerPhoneNumber());
-		dto.setFloorArea(b.getFloorArea());
-		dto.setUnusedArea(null);
-		dto.setRentAreas(areas.toString());
-		dto.setBrokageFee(b.getBrokerageFee());
-		dto.setServiceFee(b.getServiceFee());
-		dto.setRentPrice(b.getRentPrice());
-		return dto;
 	}
 
 }
