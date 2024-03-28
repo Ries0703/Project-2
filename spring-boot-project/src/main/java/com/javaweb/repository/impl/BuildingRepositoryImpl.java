@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,15 +13,17 @@ import org.springframework.stereotype.Repository;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.utils.ConnectionUtil;
-import com.javaweb.utils.ConvertUtil;
-import com.javaweb.utils.ValidationUtil;
+import com.javaweb.utils.NumberUtil;
+import com.javaweb.utils.StringUtil;
 
 @Repository
 public class BuildingRepositoryImpl implements BuildingRepository {
 
 	@Override
 	public List<BuildingEntity> findAll(Map<String, Object> params, List<String> typeCode) {
-		ValidationUtil.validateNumber(params);
+		checkNumericFields(params);
+
+		// build SQL query
 		StringBuilder select = new StringBuilder("SELECT ");
 		StringBuilder distinct = new StringBuilder();
 		StringBuilder where = new StringBuilder("\nWHERE 1 = 1");
@@ -29,26 +32,64 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		sqlWhereSimple(params, where);
 		sqlWhereComplex(params, typeCode, where);
 		sqlJoin(params, typeCode, join);
-		if (!join.toString().trim().equals("")) {
+		if (!StringUtil.isEmpty(join)) {
 			distinct.append("DISTINCT");
 		}
 		StringBuilder sql = select.append(distinct).append(columns).append(join).append(where);
 		System.out.println(sql);
-		
-		
+
+		// convert query's results to entities
+		List<BuildingEntity> results = new ArrayList<>();
 		try (Connection con = ConnectionUtil.getConnection();
 				PreparedStatement stm = con.prepareStatement(sql.toString());
 				ResultSet rs = stm.executeQuery();) {
-			return ConvertUtil.resultSetToBuildingEntities(rs);
+			while (rs.next()) {
+				BuildingEntity building = new BuildingEntity();
+				building.setId(rs.getLong("id"));
+				building.setName(rs.getString("name"));
+				building.setStreet(rs.getString("street"));
+				building.setWard(rs.getString("ward"));
+				building.setDistrictId(rs.getLong("districtid"));
+				building.setNumberOfBasement(rs.getInt("numberofbasement"));
+				building.setManagerName(rs.getString("managername"));
+				building.setManagerPhoneNumber(rs.getString("managerphonenumber"));
+				building.setFloorArea(rs.getInt("floorarea"));
+				building.setBrokerageFee(rs.getDouble("brokeragefee"));
+				building.setServiceFee(rs.getString("servicefee"));
+				building.setRentPrice(rs.getInt("rentprice"));
+				results.add(building);
+			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
-			return null;
+		}
+		return results;
+	}
+
+	private void checkNumericFields(Map<String, Object> params) {
+		for (Map.Entry<String, Object> param : params.entrySet()) {
+			if (StringUtil.isEmpty(param.getValue())) {
+				continue;
+			}
+			switch (param.getKey()) {
+			case "floorArea":
+			case "areaFrom":
+			case "areaTo":
+			case "rentPriceFrom":
+			case "rentPriceTo":
+			case "numberOfBasement":
+			case "districtId":
+			case "staffId":
+				if (!NumberUtil.isNumber(param.getValue())) {
+					throw new NumberFormatException(param.getKey());
+				}
+				break;
+			}
 		}
 	}
 
 	private void sqlWhereSimple(Map<String, Object> params, StringBuilder where) {
 		for (Map.Entry<String, Object> entry : params.entrySet()) {
-			if (!ValidationUtil.validateParam(entry)) {
+			if (StringUtil.isEmpty(entry.getValue())) {
 				continue;
 			}
 			switch (entry.getKey()) {
@@ -59,7 +100,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			case "level":
 			case "managerName":
 			case "managerPhoneNumber":
-				where.append("\n\tAND b." + entry.getKey() + " LIKE '%" + entry.getValue() + "%'");
+				where.append("\n\tAND b." + entry.getKey() + " LIKE '%" + entry.getValue().toString().trim() + "%'");
 				break;
 			case "floorArea":
 			case "districtId":
@@ -74,40 +115,35 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 	}
 
 	private void sqlWhereComplex(Map<String, Object> params, List<String> typeCode, StringBuilder where) {
-		for (Map.Entry<String, Object> entry : params.entrySet()) {
-			if (ValidationUtil.validateParam(entry.getValue())) {
-				continue;
-			}
-			switch (entry.getKey()) {
-			case "rentPriceFrom":
-				where.append("\n\tAND b.rentprice" + " >= " + entry.getValue());
-				break;
-			case "rentPriceTo":
-				where.append("\n\tAND b.rentprice" + " <= " + entry.getValue());
-				break;
-			case "areaFrom":
-				where.append("\n\tAND ra.value >= " + entry.getValue());
-				break;
-			case "areaTo":
-				where.append("\n\tAND ra.value <= " + entry.getValue());
-				break;
-			}
+		if (!StringUtil.isEmpty(params.get("rentPriceFrom"))) {
+			where.append("\n\tAND b.rentprice >= " + params.get("rentPriceFrom"));
 		}
-		if (ValidationUtil.validateTypeCode(typeCode)) {
+
+		if (!StringUtil.isEmpty(params.get("rentPriceTo"))) {
+			where.append("\n\tAND b.rentprice <= " + params.get("rentPriceTo"));
+		}
+
+		if (!StringUtil.isEmpty(params.get("areaFrom"))) {
+			where.append("\n\tAND ra.value >= " + params.get("areaFrom"));
+		}
+
+		if (!StringUtil.isEmpty(params.get("areaTo"))) {
+			where.append("\n\tAND ra.value <= " + params.get("areaTo"));
+		}
+
+		if (StringUtil.usableTypeCode(typeCode)) {
 			typeCode.stream().forEach(str -> where.append("\nOR rt.code LIKE '%" + str.trim() + "%'"));
 		}
 	}
 
 	private void sqlJoin(Map<String, Object> params, List<String> typeCode, StringBuilder join) {
-		if (ValidationUtil.validateParam(params.get("staffId"))) {
+		if (!StringUtil.isEmpty(params.get("staffId"))) {
 			join.append("\nJOIN assignmentbuilding asb ON b.id = asb.buildingid");
 		}
-		if (ValidationUtil.validateParam(params.get("areaFrom"))
-				|| ValidationUtil.validateParam(params.get("areaTo"))) {
+		if (!StringUtil.isEmpty(params.get("areaFrom")) || !StringUtil.isEmpty(params.get("areaTo"))) {
 			join.append("\nJOIN rentarea ra ON b.id = ra.buildingid");
 		}
-
-		if (ValidationUtil.validateTypeCode(typeCode)) {
+		if (!StringUtil.isEmpty(typeCode)) {
 			join.append(
 					"\nJOIN buildingrenttype brt ON brt.buildingid = b.id" + "\nJOIN renttype rt ON brt.id = rt.id");
 		}

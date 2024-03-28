@@ -22,7 +22,8 @@ public class GlobalExceptionHandler {
 		Map<String, Object> error = new LinkedHashMap<>();
 		error.put("status", HttpStatus.BAD_REQUEST);
 		error.put("error", "not a number");
-		error.put("detail", "expect numbers in numeric fields");
+		error.put("detail", "expect a number in field '" + ex.getMessage() + "'");
+
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 }
