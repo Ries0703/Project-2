@@ -72,7 +72,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
-			
+
 		}
 		return results;
 	}
