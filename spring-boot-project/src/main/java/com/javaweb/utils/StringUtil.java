@@ -2,16 +2,16 @@ package com.javaweb.utils;
 
 import java.util.List;
 
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class StringUtil {
 	public static boolean usableTypeCode(List<String> typeCodes) {
-		if (typeCodes == null)
-			return false;
-		return typeCodes.stream().filter(str -> !StringUtils.isEmpty(str)).count() > 0;
+	    if (typeCodes == null)
+	        return false;
+	    return typeCodes.stream().anyMatch(str -> !StringUtils.isEmpty(str));
 	}
 
 	public static boolean isEmpty(Object str) {
-		return str == null || str.toString().trim().equals("");
+		return str == null || StringUtils.isBlank(str.toString());
 	}
 }

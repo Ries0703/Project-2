@@ -5,8 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -19,6 +22,13 @@ import com.javaweb.utils.StringUtil;
 
 @Repository
 public class BuildingRepositoryImpl implements BuildingRepository {
+	private static final Set<String> NUMERIC_FIELDS = new HashSet<>(Arrays.asList("floorArea", "areaFrom", "areaTo",
+			"rentPriceFrom", "rentPriceTo", "numberOfBasement", "districtId", "staffId"));
+	private static final Set<String> LIKE_FIELDS = new HashSet<>(
+			Arrays.asList("name", "ward", "street", "direction", "level", "managerName", "managerPhoneNumber"));
+	private static final Set<String> EQUAL_FIELDS = new HashSet<>(
+			Arrays.asList("floorArea", "districtId", "numberOfBasement"));
+	private static final String STAFF_ID_FIELD = "staffId";
 
 	@Override
 	public List<BuildingEntity> findAll(Map<String, Object> params, List<String> typeCode) {
@@ -62,6 +72,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+			
 		}
 		return results;
 	}
@@ -71,46 +82,28 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			if (StringUtil.isEmpty(param.getValue())) {
 				continue;
 			}
-			switch (param.getKey()) {
-			case "floorArea":
-			case "areaFrom":
-			case "areaTo":
-			case "rentPriceFrom":
-			case "rentPriceTo":
-			case "numberOfBasement":
-			case "districtId":
-			case "staffId":
-				if (!NumberUtil.isNumber(param.getValue())) {
-					throw new NumberFormatException(param.getKey());
-				}
-				break;
+			if (!NUMERIC_FIELDS.contains(param.getKey())) {
+				continue;
+			}
+			if (!NumberUtil.isNumber(param.getValue())) {
+				throw new NumberFormatException(param.getKey());
 			}
 		}
 	}
 
 	private void sqlWhereSimple(Map<String, Object> params, StringBuilder where) {
-		for (Map.Entry<String, Object> entry : params.entrySet()) {
-			if (StringUtil.isEmpty(entry.getValue())) {
+		for (Map.Entry<String, Object> param : params.entrySet()) {
+			if (StringUtil.isEmpty(param.getValue())) {
 				continue;
 			}
-			switch (entry.getKey()) {
-			case "name":
-			case "ward":
-			case "street":
-			case "direction":
-			case "level":
-			case "managerName":
-			case "managerPhoneNumber":
-				where.append("\n\tAND b." + entry.getKey() + " LIKE '%" + entry.getValue().toString().trim() + "%'");
-				break;
-			case "floorArea":
-			case "districtId":
-			case "numberOfBasement":
-				where.append("\n\tAND b." + entry.getKey() + " = " + entry.getValue());
-				break;
-			case "staffId":
-				where.append("\n\tAND asb.staffid = " + entry.getValue());
-				break;
+			String key = param.getKey();
+			Object value = param.getValue();
+			if (LIKE_FIELDS.contains(key)) {
+				where.append("\n\tAND b." + key + " LIKE '%" + value.toString().trim() + "%'");
+			} else if (EQUAL_FIELDS.contains(key)) {
+				where.append("\n\tAND b." + key + " = " + value);
+			} else if (STAFF_ID_FIELD.equals(key)) {
+				where.append("\n\tAND asb.staffid = " + value);
 			}
 		}
 	}

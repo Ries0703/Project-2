@@ -1,7 +1,6 @@
 package com.javaweb.converter;
 
-import java.util.List;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,23 +15,19 @@ public class BuildingConverter {
 	private DistrictRepository districtRepository;
 	@Autowired
 	private RentAreaRepository rentAreaRepository;
+	@Autowired
+	private ModelMapper modelMapper;
 
 	public BuildingDTO entityToDto(BuildingEntity building) {
-		BuildingDTO dto = new BuildingDTO();
-		String address = new StringBuilder().append(building.getStreet()).append(", ").append(building.getWard())
-				.append(", ").append(districtRepository.getById(building.getDistrictId()).getName()).toString();
-		List<String> areas = rentAreaRepository.getByBuildingId(building.getId());
-		dto.setName(building.getName());
+		// build address and rentAreas 
+		String address = String.join(", ", building.getStreet(), building.getWard(),
+				districtRepository.getById(building.getDistrictId()).getName());
+		String rentAreas = String.join(", ", rentAreaRepository.getByBuildingId(building.getId()));
+
+		BuildingDTO dto = modelMapper.map(building, BuildingDTO.class);
 		dto.setAddress(address.toString());
-		dto.setNumberOfBasement(building.getNumberOfBasement());
-		dto.setManagerName(building.getManagerName());
-		dto.setManagerPhoneNumber(building.getManagerPhoneNumber());
-		dto.setFloorArea(building.getFloorArea());
-		dto.setUnusedArea(null);
-		dto.setRentAreas(String.join(", ", areas));
-		dto.setBrokageFee(building.getBrokerageFee());
-		dto.setServiceFee(building.getServiceFee());
-		dto.setRentPrice(building.getRentPrice());
+		dto.setRentAreas(rentAreas);
+		
 		return dto;
 	}
 }
