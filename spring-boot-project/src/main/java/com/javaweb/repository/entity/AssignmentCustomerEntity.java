@@ -3,35 +3,35 @@ package com.javaweb.repository.entity;
 import java.time.LocalDateTime;
 
 public class AssignmentCustomerEntity {
-	private long id;
-	private long staffId;
-	private long customerId;
+	private Long id;
+	private Long staffId;
+	private Long customerId;
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public long getStaffId() {
+	public Long getStaffId() {
 		return staffId;
 	}
 
-	public void setStaffId(long staffId) {
+	public void setStaffId(Long staffId) {
 		this.staffId = staffId;
 	}
 
-	public long getCustomerId() {
+	public Long getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(long customerId) {
+	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
 

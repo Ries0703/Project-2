@@ -21,9 +21,7 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> handleNumberFormatException(NumberFormatException ex) {
 		Map<String, Object> error = new LinkedHashMap<>();
 		error.put("status", HttpStatus.BAD_REQUEST);
-		error.put("error", "not a number");
-		error.put("detail", "expect a number in field '" + ex.getMessage() + "'");
-
+		error.put("error", ex.getMessage());
 		return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 	}
 }

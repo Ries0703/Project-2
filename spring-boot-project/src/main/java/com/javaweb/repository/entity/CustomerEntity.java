@@ -3,7 +3,7 @@ package com.javaweb.repository.entity;
 import java.time.LocalDateTime;
 
 public class CustomerEntity {
-	private long id;
+	private Long id;
 	private String fullName;
 	private String phone;
 	private String email;
@@ -12,7 +12,7 @@ public class CustomerEntity {
 	private String createdBy;
 	private String modifiedBy;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

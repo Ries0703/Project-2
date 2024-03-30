@@ -3,7 +3,7 @@ package com.javaweb.repository.entity;
 import java.time.LocalDateTime;
 
 public class RoleEntity {
-	private long id;
+	private Long id;
 	private String name;
 	private String code;
 	private LocalDateTime createdDate;
@@ -11,11 +11,11 @@ public class RoleEntity {
 	private String createdBy;
 	private String modifiedBy;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

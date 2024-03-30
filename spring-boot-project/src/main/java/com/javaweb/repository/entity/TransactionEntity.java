@@ -3,19 +3,19 @@ package com.javaweb.repository.entity;
 import java.time.LocalDateTime;
 
 public class TransactionEntity {
-	private long id;
+	private Long id;
 	private String note;
-	private long customerId;
+	private Long customerId;
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -27,11 +27,11 @@ public class TransactionEntity {
 		this.note = note;
 	}
 
-	public long getCustomerId() {
+	public Long getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(long customerId) {
+	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
 

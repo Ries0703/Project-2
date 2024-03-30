@@ -1,11 +1,11 @@
 package com.javaweb.repository.entity;
 
 public class BuildingRentTypeEntity {
-	private long id;
-	private long buildingId;
-	private long rentTypeId;
+	private Long id;
+	private Long buildingId;
+	private Long rentTypeId;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

@@ -1,4 +1,4 @@
-package com.javaweb.service.dto;
+package com.javaweb.dto;
 
 import org.springframework.stereotype.Component;
 
@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component;
 public class BuildingDTO {
 	private String name;
 	private String address;
-	private Integer numberOfBasement;
+	private Long numberOfBasement;
 	private String managerName;
 	private String managerPhoneNumber;
-	private Integer floorArea;
-	private Integer unusedArea;
+	private Long floorArea;
+	private Long unusedArea;
 	private String rentAreas;
 	private Double brokageFee;
 	private String serviceFee;
-	private Integer rentPrice;
+	private Long rentPrice;
 
 	public String getName() {
 		return name;
@@ -32,11 +32,11 @@ public class BuildingDTO {
 		this.address = address;
 	}
 
-	public Integer getNumberOfBasement() {
+	public Long getNumberOfBasement() {
 		return numberOfBasement;
 	}
 
-	public void setNumberOfBasement(Integer numberOfBasement) {
+	public void setNumberOfBasement(Long numberOfBasement) {
 		this.numberOfBasement = numberOfBasement;
 	}
 
@@ -56,19 +56,19 @@ public class BuildingDTO {
 		this.managerPhoneNumber = managerPhoneNumber;
 	}
 
-	public Integer getFloorArea() {
+	public Long getFloorArea() {
 		return floorArea;
 	}
 
-	public void setFloorArea(Integer floorArea) {
+	public void setFloorArea(Long floorArea) {
 		this.floorArea = floorArea;
 	}
 
-	public Integer getUnusedArea() {
+	public Long getUnusedArea() {
 		return unusedArea;
 	}
 
-	public void setUnusedArea(Integer unusedArea) {
+	public void setUnusedArea(Long unusedArea) {
 		this.unusedArea = unusedArea;
 	}
 
@@ -96,11 +96,11 @@ public class BuildingDTO {
 		this.serviceFee = serviceFee;
 	}
 
-	public Integer getRentPrice() {
+	public Long getRentPrice() {
 		return rentPrice;
 	}
 
-	public void setRentPrice(Integer rentPrice) {
+	public void setRentPrice(Long rentPrice) {
 		this.rentPrice = rentPrice;
 	}
 

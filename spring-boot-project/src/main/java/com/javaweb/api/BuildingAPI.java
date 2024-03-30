@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javaweb.dto.BuildingDTO;
 import com.javaweb.service.BuildingService;
-import com.javaweb.service.dto.BuildingDTO;
 
 @RestController
 @RequestMapping(value = "api/buildings/")

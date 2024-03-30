@@ -3,21 +3,21 @@ package com.javaweb.repository.entity;
 import java.time.LocalDateTime;
 
 public class TransactionTypeEntity {
-	private long id;
+	private Long id;
 	private String name;
 	private String code;
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
-	private long transactionId;
+	private Long transactionId;
 
 	// getters and setters for all fields
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -69,11 +69,11 @@ public class TransactionTypeEntity {
 		this.modifiedBy = modifiedBy;
 	}
 
-	public long getTransactionId() {
+	public Long getTransactionId() {
 		return transactionId;
 	}
 
-	public void setTransactionId(long transactionId) {
+	public void setTransactionId(Long transactionId) {
 		this.transactionId = transactionId;
 	}
 }
