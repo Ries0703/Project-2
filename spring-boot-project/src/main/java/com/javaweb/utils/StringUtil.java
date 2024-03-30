@@ -10,6 +10,7 @@ public class StringUtil {
 			return false;
 		return typeCodes.stream().filter(str -> !StringUtils.isEmpty(str)).count() > 0;
 	}
+
 	public static boolean isEmpty(Object str) {
 		return str == null || str.toString().trim().equals("");
 	}

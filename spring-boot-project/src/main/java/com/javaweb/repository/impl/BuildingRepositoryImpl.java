@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -132,7 +133,9 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		}
 
 		if (StringUtil.usableTypeCode(typeCode)) {
-			typeCode.forEach(str -> where.append("\nOR rt.code LIKE '%" + str.trim() + "%'"));
+			List<String> trimmedList = typeCode.stream().map(str -> "'" + str.trim() + "'")
+					.collect(Collectors.toList());
+			where.append("\n\tAND rt.code IN (").append(String.join(", ", trimmedList)).append(") ");
 		}
 	}
 
@@ -143,10 +146,9 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		if (!StringUtil.isEmpty(params.get("areaFrom")) || !StringUtil.isEmpty(params.get("areaTo"))) {
 			join.append("\nJOIN rentarea ra ON b.id = ra.buildingid");
 		}
-		if (!StringUtil.isEmpty(typeCode)) {
+		if (StringUtil.usableTypeCode(typeCode)) {
 			join.append(
 					"\nJOIN buildingrenttype brt ON brt.buildingid = b.id" + "\nJOIN renttype rt ON brt.id = rt.id");
 		}
 	}
-
 }
