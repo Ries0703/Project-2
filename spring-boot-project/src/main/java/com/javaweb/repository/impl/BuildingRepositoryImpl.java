@@ -30,9 +30,9 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		// build SQL query
 		StringBuilder select = new StringBuilder("SELECT ");
 		StringBuilder distinct = new StringBuilder();
-		StringBuilder where = new StringBuilder("\nWHERE 1 = 1");
-		StringBuilder join = new StringBuilder();
 		StringBuilder columns = new StringBuilder("\r\n  b.*\r\nFROM building b");
+		StringBuilder join = new StringBuilder();
+		StringBuilder where = new StringBuilder("\nWHERE 1 = 1");
 		sqlWhereSimple(buildingSearchBuilder, where);
 		sqlWhereComplex(buildingSearchBuilder, where);
 		sqlJoin(buildingSearchBuilder, join);
