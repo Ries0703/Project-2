@@ -1,6 +1,5 @@
 package com.javaweb.advice;
 
-import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -11,11 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-	@ExceptionHandler(value = { SQLException.class })
-	public ResponseEntity<?> handleSyntaxException(SQLException ex) {
-		String message = ex.getMessage();
-		return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
 
 	@ExceptionHandler(value = { NumberFormatException.class })
 	public ResponseEntity<?> handleNumberFormatException(NumberFormatException ex) {

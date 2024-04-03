@@ -58,9 +58,6 @@ public class BuildingSearchBuilder {
 		private Long staffId;
 		private List<String> typeCodes;
 
-		public Builder() {
-			
-		}
 		public BuildingSearchBuilder build() {
 			return new BuildingSearchBuilder(this);
 		}
