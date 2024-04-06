@@ -1,70 +1,38 @@
 package com.javaweb.repository.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "transaction")
+@Getter
+@Setter
+@Deprecated
 public class TransactionEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name = "note")
 	private String note;
-	private Long customerId;
+
+	@ManyToOne(fetch = FetchType.LAZY) // Optional: Configure fetch type for customer
+	@JoinColumn(name = "customerid")
+	private CustomerEntity customer; // Assuming CustomerEntity exists
+
+	@Column(name = "createddate")
 	private LocalDateTime createdDate;
+
+	@Column(name = "modifieddate")
 	private LocalDateTime modifiedDate;
+
+	@Column(name = "createdBy")
 	private String createdBy;
+
+	@Column(name = "modifiedBy")
 	private String modifiedBy;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
-
-	public Long getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(Long customerId) {
-		this.customerId = customerId;
-	}
-
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public LocalDateTime getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(LocalDateTime modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-
 }

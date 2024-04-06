@@ -1,106 +1,49 @@
 package com.javaweb.repository.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity // Mark this class as a JPA entity
+@Table(name = "user") // Specify the corresponding database table name
+@Getter
+@Setter
 public class UserEntity {
+
+	@Id // Mark this field as the primary key
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment the ID
+	@Column(name = "id")
 	private Long id;
+
+	@Column(name = "username", nullable = false, unique = true) // Not null and unique
 	private String username;
-	private String password;
-	private String fullname;
+
+	@Column(name = "password", nullable = false) // Not null
+	private String password; // Consider using a secure password hashing mechanism
+
+	@Column(name = "fullname")
+	private String fullName; // Use camelCase for better readability
+
+	@Column(name = "phone")
 	private String phone;
+
+	@Column(name = "email")
 	private String email;
+
+	@Column(name = "status", nullable = false) // Not null
 	private Integer status;
+
+	@Column(name = "createddate")
 	private LocalDateTime createdDate;
+
+	@Column(name = "modifieddate")
 	private LocalDateTime modifiedDate;
+
+	@Column(name = "createdBy")
 	private String createdBy;
+
+	@Column(name = "modifiedBy")
 	private String modifiedBy;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getFullname() {
-		return fullname;
-	}
-
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public LocalDateTime getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(LocalDateTime modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-
 }

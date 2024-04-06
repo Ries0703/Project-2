@@ -1,32 +1,27 @@
 package com.javaweb.repository.entity;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
+
+@Setter
+@Getter
+@Entity
+@Table(name = "buildingrenttype")
+@Deprecated
 public class BuildingRentTypeEntity {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
+
+	@NotNull
+
 	private Long buildingId;
+
+
 	private Long rentTypeId;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getBuildingId() {
-		return buildingId;
-	}
-
-	public void setBuildingId(Long buildingId) {
-		this.buildingId = buildingId;
-	}
-
-	public Long getRentTypeId() {
-		return rentTypeId;
-	}
-
-	public void setRentTypeId(Long rentTypeId) {
-		this.rentTypeId = rentTypeId;
-	}
 
 }

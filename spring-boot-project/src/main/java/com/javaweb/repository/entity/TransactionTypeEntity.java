@@ -1,79 +1,41 @@
 package com.javaweb.repository.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "transaction_type")
+@Getter
+@Setter
 public class TransactionTypeEntity {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name = "name", nullable = false) // Not null
 	private String name;
+
+	@Column(name = "code", nullable = false, unique = true) // Not null and unique
 	private String code;
+
+	@Column(name = "createddate")
 	private LocalDateTime createdDate;
+
+	@Column(name = "modifieddate")
 	private LocalDateTime modifiedDate;
+
+	@Column(name = "createdBy")
 	private String createdBy;
+
+	@Column(name = "modifiedBy")
 	private String modifiedBy;
-	private Long transactionId;
 
-	// getters and setters for all fields
-	public Long getId() {
-		return id;
-	}
+	@ManyToOne(fetch = FetchType.LAZY) // Optional: Configure fetch type
+	@JoinColumn(name = "transactionid")
+	private TransactionEntity transaction; // Assuming TransactionEntity exists
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public LocalDateTime getModifiedDate() {
-		return modifiedDate;
-	}
-
-	public void setModifiedDate(LocalDateTime modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
-
-	public String getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-
-	public Long getTransactionId() {
-		return transactionId;
-	}
-
-	public void setTransactionId(Long transactionId) {
-		this.transactionId = transactionId;
-	}
 }
