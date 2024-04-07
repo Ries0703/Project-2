@@ -1,25 +1,43 @@
 package com.javaweb.repository.entity;
 
 
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
-@Setter
-@Getter
 
 @Entity
 @Table(name = "building")
-
+@Getter
+@Setter
 public class BuildingEntity {
 
+    @ManyToOne
+    @JoinColumn(name = "districtid", nullable = false)
+    private DistrictEntity districtEntity;
+    
+    @OneToMany(mappedBy = "buildingEntity", fetch = FetchType.LAZY)
+    private List<RentAreaEntity> rentAreaEntities;    
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
+    
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
@@ -29,10 +47,6 @@ public class BuildingEntity {
 
     @Column(name = "ward")
     private String ward;
-
-    @ManyToOne
-    @JoinColumn(name = "districtid")
-    private DistrictEntity district;
 
     @Column(name = "structure")
     private String structure;
@@ -107,10 +121,10 @@ public class BuildingEntity {
     @Column(name = "modifieddate")
     private String modifiedDate;
 
-    @Column(name = "createdBy")
+    @Column(name = "createdby")
     private String createdBy;
 
-    @Column(name = "modifiedBy")
+    @Column(name = "modifiedby")
     private String modifiedBy;
 
     @Column(name = "managername")

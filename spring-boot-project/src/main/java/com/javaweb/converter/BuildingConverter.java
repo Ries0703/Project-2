@@ -9,6 +9,8 @@ import com.javaweb.repository.DistrictRepository;
 import com.javaweb.repository.RentAreaRepository;
 import com.javaweb.repository.entity.BuildingEntity;
 
+import java.util.stream.Collectors;
+
 @Component
 public class BuildingConverter {
 	@Autowired
@@ -19,15 +21,14 @@ public class BuildingConverter {
 	private ModelMapper modelMapper;
 
 	public BuildingDTO entityToDto(BuildingEntity building) {
-		// build address and rentAreas 
 		String address = String.join(", ", building.getStreet(), building.getWard(),
-				districtRepository.getById(building.getDistrictId()).getName());
-		String rentAreas = String.join(", ", rentAreaRepository.getByBuildingId(building.getId()));
+				building.getDistrictEntity().getId().toString());
+		String rentArea = building.getRentAreaEntities().stream().map(o -> o.getValue().toString())
+				.collect(Collectors.joining(", "));
 
 		BuildingDTO dto = modelMapper.map(building, BuildingDTO.class);
-		dto.setAddress(address.toString());
-		dto.setRentAreas(rentAreas);
-		
+		dto.setAddress(address);
+		dto.setRentAreas(rentArea);
 		return dto;
 	}
 }

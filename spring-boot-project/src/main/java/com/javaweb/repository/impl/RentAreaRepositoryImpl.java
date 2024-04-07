@@ -19,25 +19,26 @@ public class RentAreaRepositoryImpl implements RentAreaRepository {
 
 	@Override
 	public List<String> getByBuildingId(long buildingId) {
-		StringBuilder sql = new StringBuilder("SELECT * FROM rentarea WHERE buildingid = ").append(buildingId);
+//		StringBuilder sql = new StringBuilder("SELECT * FROM rentarea WHERE buildingid = ").append(buildingId);
 //		System.out.println(sql);
 
-		try (Connection con = ConnectionUtil.getConnection();
-				PreparedStatement stm = con.prepareStatement(sql.toString());
-				ResultSet rs = stm.executeQuery();) {
-			List<RentAreaEntity> rentAreas = new ArrayList<>();
-			while (rs.next()) {
-				RentAreaEntity ra = new RentAreaEntity();
-				ra.setId(rs.getLong("id"));
-				ra.setValue(rs.getInt("value"));
-				ra.setBuildingId(rs.getLong("buildingid"));
-				rentAreas.add(ra);
-			}
-			List<String> values = rentAreas.stream().map(o -> o.getValue().toString()).collect(Collectors.toList());
-			return values;
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-			return null;
-		}
+//		try (Connection con = ConnectionUtil.getConnection();
+//				PreparedStatement stm = con.prepareStatement(sql.toString());
+//				ResultSet rs = stm.executeQuery();) {
+//			List<RentAreaEntity> rentAreas = new ArrayList<>();
+//			while (rs.next()) {
+//				RentAreaEntity ra = new RentAreaEntity();
+//				ra.setId(rs.getLong("id"));
+//				ra.setValue(rs.getInt("value"));
+//				ra.setBuildingId(rs.getLong("buildingid"));
+//				rentAreas.add(ra);
+//			}
+//			List<String> values = rentAreas.stream().map(o -> o.getValue().toString()).collect(Collectors.toList());
+//			return values;
+//		} catch (SQLException ex) {
+//			ex.printStackTrace();
+//			return null;
+//		}
+		return null;
 	}
 }

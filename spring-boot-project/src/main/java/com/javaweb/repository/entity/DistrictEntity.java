@@ -1,33 +1,42 @@
 package com.javaweb.repository.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Setter
-@Getter
-@Table(name = "district")
+import lombok.Getter;
+import lombok.Setter;
+
+
+
+
 @Entity
+@Table(name = "district")
+@Getter
+@Setter
 public class DistrictEntity {
+	
+	@OneToMany(mappedBy = "districtEntity", fetch = FetchType.LAZY)
+	private List<BuildingEntity> buildingEntityList;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    @Column(name = "code")
-    @NotNull
-    private String code;
+	@Column(name = "code")
+	@NotNull
+	private String code;
 
-    @Column(name = "name")
-    @NotNull
-    private String name;
-
+	@Column(name = "name")
+	@NotNull
+	private String name;
 }
