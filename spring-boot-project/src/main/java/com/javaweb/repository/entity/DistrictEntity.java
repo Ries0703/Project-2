@@ -24,7 +24,7 @@ import lombok.Setter;
 @Setter
 public class DistrictEntity {
 	
-	@OneToMany(mappedBy = "districtEntity", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "districtEntity")
 	private List<BuildingEntity> buildingEntityList;
 
 	@Id

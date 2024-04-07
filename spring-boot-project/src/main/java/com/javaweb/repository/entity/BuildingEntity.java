@@ -32,7 +32,7 @@ public class BuildingEntity {
     @JoinColumn(name = "districtid", nullable = false)
     private DistrictEntity districtEntity;
     
-    @OneToMany(mappedBy = "buildingEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "buildingEntity")
     private List<RentAreaEntity> rentAreaEntities;    
     
     @ManyToMany
