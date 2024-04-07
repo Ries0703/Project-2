@@ -13,7 +13,7 @@ import com.javaweb.dto.BuildingDTO;
 import com.javaweb.service.BuildingService;
 
 @RestController
-@RequestMapping(value = "api/buildings/")
+@RequestMapping(value = "api/building/")
 public class BuildingAPI {
 	@Autowired
 	BuildingService buildingService;
