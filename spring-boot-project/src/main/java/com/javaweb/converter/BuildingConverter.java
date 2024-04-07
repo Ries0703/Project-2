@@ -22,7 +22,7 @@ public class BuildingConverter {
 
 	public BuildingDTO entityToDto(BuildingEntity building) {
 		String address = String.join(", ", building.getStreet(), building.getWard(),
-				building.getDistrictEntity().getId().toString());
+				building.getDistrictEntity().getName().toString());
 		String rentArea = building.getRentAreaEntities().stream().map(o -> o.getValue().toString())
 				.collect(Collectors.joining(", "));
 
