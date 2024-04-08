@@ -141,7 +141,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		}
 		if (StringUtil.usableTypeCode(typeCode)) {
 			join.append(
-					"\nJOIN buildingrenttype brt ON brt.buildingid = b.id" + "\nJOIN renttype rt ON brt.id = rt.id");
+					"\nJOIN buildingrenttype brt ON brt.buildingid = b.id" + "\nJOIN renttype rt ON brt.renttypeid = rt.id");
 		}
 	}
 }
