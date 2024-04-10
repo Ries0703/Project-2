@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.javaweb.converter.BuildingConverter;
 import com.javaweb.converter.BuildingSearchBuilderConverter;
-import com.javaweb.dto.BuildingDTO;
+import com.javaweb.dto.BuildingDto;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.service.BuildingService;
 
@@ -24,7 +24,7 @@ public class BuildingServiceImpl implements BuildingService {
 	private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
 
 	@Override
-	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCodes) {
+	public List<BuildingDto> findAll(Map<String, Object> params, List<String> typeCodes) {
 		return buildingRepository
 				.findAll(buildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCodes))
 				.stream()

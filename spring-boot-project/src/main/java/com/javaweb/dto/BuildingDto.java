@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class BuildingDTO {
+public class BuildingDto {
 	private String name;
 	private String address;
 	private Long numberOfBasement;
