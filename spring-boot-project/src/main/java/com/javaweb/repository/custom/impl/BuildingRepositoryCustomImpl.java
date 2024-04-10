@@ -1,4 +1,4 @@
-package com.javaweb.repository.impl;
+package com.javaweb.repository.custom.impl;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -12,12 +12,12 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import com.javaweb.builder.BuildingSearchBuilder;
-import com.javaweb.repository.BuildingRepository;
+import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.utils.StringUtil;
 
 @Repository
-public class BuildingRepositoryImpl implements BuildingRepository {
+public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 	private static final List<String> LIKE_FIELDS = Arrays.asList("name", "ward", "street", "direction", "level",
 			"managerName", "managerPhoneNumber");
 	private static final List<String> EQUAL_FIELDS = Arrays.asList("floorArea", "districtId", "numberOfBasement");
@@ -109,3 +109,4 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		}
 	}
 }
+
