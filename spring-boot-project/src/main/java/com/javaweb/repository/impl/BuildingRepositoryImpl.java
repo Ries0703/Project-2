@@ -6,10 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -22,12 +20,11 @@ import com.javaweb.utils.StringUtil;
 
 @Repository
 public class BuildingRepositoryImpl implements BuildingRepository {
-	private static final Set<String> NUMERIC_FIELDS = new HashSet<>(Arrays.asList("floorArea", "areaFrom", "areaTo",
-			"rentPriceFrom", "rentPriceTo", "numberOfBasement", "districtId", "staffId"));
-	private static final Set<String> LIKE_FIELDS = new HashSet<>(
-			Arrays.asList("name", "ward", "street", "direction", "level", "managerName", "managerPhoneNumber"));
-	private static final Set<String> EQUAL_FIELDS = new HashSet<>(
-			Arrays.asList("floorArea", "districtId", "numberOfBasement"));
+	private static final List<String> NUMERIC_FIELDS = Arrays.asList("floorArea", "areaFrom", "areaTo", "rentPriceFrom",
+			"rentPriceTo", "numberOfBasement", "districtId", "staffId");
+	private static final List<String> LIKE_FIELDS = Arrays.asList("name", "ward", "street", "direction", "level",
+			"managerName", "managerPhoneNumber");
+	private static final List<String> EQUAL_FIELDS = Arrays.asList("floorArea", "districtId", "numberOfBasement");
 	private static final String STAFF_ID_FIELD = "staffId";
 
 	@Override
@@ -53,7 +50,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		List<BuildingEntity> results = new ArrayList<>();
 		try (Connection con = ConnectionUtil.getConnection();
 				PreparedStatement stm = con.prepareStatement(sql.toString());
-				ResultSet rs = stm.executeQuery();) {
+				ResultSet rs = stm.executeQuery()) {
 			while (rs.next()) {
 				BuildingEntity building = new BuildingEntity();
 				building.setId(rs.getLong("id"));
@@ -140,8 +137,8 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			join.append("\nJOIN rentarea ra ON b.id = ra.buildingid");
 		}
 		if (StringUtil.usableTypeCode(typeCode)) {
-			join.append(
-					"\nJOIN buildingrenttype brt ON brt.buildingid = b.id" + "\nJOIN renttype rt ON brt.renttypeid = rt.id");
+			join.append("\nJOIN buildingrenttype brt ON brt.buildingid = b.id"
+					+ "\nJOIN renttype rt ON brt.renttypeid = rt.id");
 		}
 	}
 }

@@ -18,13 +18,13 @@ public class BuildingConverter {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	public BuildingDTO entityToDto(BuildingEntity building) {
+	public BuildingDTO entityToDto(BuildingEntity buildingEntity) {
 		// build address and rentAreas 
-		String address = String.join(", ", building.getStreet(), building.getWard(),
-				districtRepository.getById(building.getDistrictId()).getName());
-		String rentAreas = String.join(", ", rentAreaRepository.getByBuildingId(building.getId()));
+		String address = String.join(", ", buildingEntity.getStreet(), buildingEntity.getWard(),
+				districtRepository.getById(buildingEntity.getDistrictId()).getName());
+		String rentAreas = String.join(", ", rentAreaRepository.getByBuildingId(buildingEntity.getId()));
 
-		BuildingDTO dto = modelMapper.map(building, BuildingDTO.class);
+		BuildingDTO dto = modelMapper.map(buildingEntity, BuildingDTO.class);
 		dto.setAddress(address.toString());
 		dto.setRentAreas(rentAreas);
 		

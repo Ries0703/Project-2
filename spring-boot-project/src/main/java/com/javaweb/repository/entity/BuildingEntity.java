@@ -1,17 +1,17 @@
 package com.javaweb.repository.entity;
 
 public class BuildingEntity {
-	private long id;
+	private Long id;
 	private String name;
 	private String street;
 	private String ward;
-	private long districtId;
+	private Long districtId;
 	private String structure;
-	private int numberOfBasement;
-	private int floorArea;
+	private Integer numberOfBasement;
+	private Integer floorArea;
 	private String direction;
 	private String level;
-	private int rentPrice;
+	private Integer rentPrice;
 	private String rentPriceDescription;
 	private String serviceFee;
 	private String carFee;
@@ -35,11 +35,11 @@ public class BuildingEntity {
 	private String managerName;
 	private String managerPhoneNumber;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -67,11 +67,11 @@ public class BuildingEntity {
 		this.ward = ward;
 	}
 
-	public long getDistrictId() {
+	public Long getDistrictId() {
 		return districtId;
 	}
 
-	public void setDistrictId(long districtId) {
+	public void setDistrictId(Long districtId) {
 		this.districtId = districtId;
 	}
 
@@ -83,19 +83,19 @@ public class BuildingEntity {
 		this.structure = structure;
 	}
 
-	public int getNumberOfBasement() {
+	public Integer getNumberOfBasement() {
 		return numberOfBasement;
 	}
 
-	public void setNumberOfBasement(int numberOfBasement) {
+	public void setNumberOfBasement(Integer numberOfBasement) {
 		this.numberOfBasement = numberOfBasement;
 	}
 
-	public int getFloorArea() {
+	public Integer getFloorArea() {
 		return floorArea;
 	}
 
-	public void setFloorArea(int floorArea) {
+	public void setFloorArea(Integer floorArea) {
 		this.floorArea = floorArea;
 	}
 
@@ -115,11 +115,11 @@ public class BuildingEntity {
 		this.level = level;
 	}
 
-	public int getRentPrice() {
+	public Integer getRentPrice() {
 		return rentPrice;
 	}
 
-	public void setRentPrice(int rentPrice) {
+	public void setRentPrice(Integer rentPrice) {
 		this.rentPrice = rentPrice;
 	}
 

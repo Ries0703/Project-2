@@ -3,19 +3,19 @@ package com.javaweb.repository.entity;
 import java.time.LocalDateTime;
 
 public class RentAreaEntity {
-	private long id;
+	private Long id;
 	private Integer value;
-	private long buildingId;
+	private Long buildingId;
 	private LocalDateTime createdDate;
 	private LocalDateTime modifiedDate;
 	private String createdBy;
 	private String modifiedBy;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -27,11 +27,11 @@ public class RentAreaEntity {
 		this.value = value;
 	}
 
-	public long getBuildingId() {
+	public Long getBuildingId() {
 		return buildingId;
 	}
 
-	public void setBuildingId(long buildingId) {
+	public void setBuildingId(Long buildingId) {
 		this.buildingId = buildingId;
 	}
 
