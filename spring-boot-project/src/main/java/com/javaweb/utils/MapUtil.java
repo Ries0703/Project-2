@@ -10,7 +10,6 @@ public class MapUtil {
 		} catch (NumberFormatException nfe) {
 			throw new NumberFormatException(" '" + value.toString() + "' " + " is not a number");
 		}
-
 	}
 
 	public static String getString(Object value) {

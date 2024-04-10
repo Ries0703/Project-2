@@ -25,7 +25,10 @@ public class BuildingServiceImpl implements BuildingService {
 
 	@Override
 	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCodes) {
-		return buildingRepository.findAll(buildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCodes))
-				.stream().map(building -> buildingConverter.entityToDto(building)).collect(Collectors.toList());
+		return buildingRepository
+				.findAll(buildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCodes))
+				.stream()
+				.map(buildingConverter::entityToDto)
+				.collect(Collectors.toList());
 	}
 }

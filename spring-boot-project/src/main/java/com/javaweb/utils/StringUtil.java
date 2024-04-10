@@ -2,6 +2,8 @@ package com.javaweb.utils;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class StringUtil {
 	public static boolean usableTypeCode(List<String> typeCodes) {
 		if (typeCodes == null)
@@ -11,6 +13,6 @@ public class StringUtil {
 	}
 
 	public static boolean isEmpty(Object str) {
-		return str == null || str.toString().trim().equals("");
+		return str == null || StringUtils.isBlank(str.toString());
 	}
 }
