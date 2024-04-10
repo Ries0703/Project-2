@@ -1,4 +1,4 @@
-package com.javaweb.dto;
+package com.javaweb.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class BuildingDto {
+public class BuildingResponseDto {
 	private String name;
 	private String address;
 	private Long numberOfBasement;
@@ -19,5 +19,4 @@ public class BuildingDto {
 	private Double brokageFee;
 	private String serviceFee;
 	private Long rentPrice;
-
 }

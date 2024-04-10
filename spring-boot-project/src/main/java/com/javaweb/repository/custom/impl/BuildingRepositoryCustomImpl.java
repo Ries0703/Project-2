@@ -41,11 +41,11 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 		if (!StringUtil.isEmpty(join)) {
 			distinct.append(" DISTINCT ");
 		}
-		StringBuilder sql = select.append(distinct).append(columns).append(join).append(where);
+		String sql = select.append(distinct).append(columns).append(join).append(where).toString();
 		
 		// get results 
 		return entityManager
-				.createNativeQuery(sql.toString(), BuildingEntity.class)
+				.createNativeQuery(sql, BuildingEntity.class)
 				.getResultList();
 	}
 
