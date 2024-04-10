@@ -21,7 +21,9 @@ public class BuildingServiceImpl implements BuildingService {
 	private BuildingConverter buildingConverter;
 	@Override
 	public List<BuildingDTO> findAll(Map<String, Object> params, List<String> typeCodes) {
-		return buildingRepository.findAll(params, typeCodes).stream()
-				.map(building -> buildingConverter.entityToDto(building)).collect(Collectors.toList());
+		return buildingRepository.findAll(params, typeCodes)
+									.stream()
+									.map(buildingConverter::entityToDto)
+									.collect(Collectors.toList());
 	}
 }
