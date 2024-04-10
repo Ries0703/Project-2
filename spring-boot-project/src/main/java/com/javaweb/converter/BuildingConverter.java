@@ -15,8 +15,6 @@ public class BuildingConverter {
 	
 	@Autowired
 	private ModelMapper modelMapper;
-
-	
 	
 	public BuildingResponseDto entityToResponseDto(BuildingEntity building) {
 		String address = String.join(", ", building.getStreet(), building.getWard(),
@@ -25,14 +23,12 @@ public class BuildingConverter {
 									.stream()
 									.map(o -> o.getValue().toString())
 									.collect(Collectors.joining(", "));
-
 		BuildingResponseDto dto = modelMapper.map(building, BuildingResponseDto.class);
 		dto.setAddress(address);
 		dto.setRentAreas(rentArea);
 		return dto;
 	}
 	public BuildingEntity requestDtoToEntity(BuildingRequestDto buildingRequestDto) {
-		
 		return modelMapper.map(buildingRequestDto, BuildingEntity.class);
 	}
 }

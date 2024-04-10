@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
-import com.javaweb.builder.BuildingSearchBuilder;
+import com.javaweb.builder.BuildingSearch;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.utils.StringUtil;
@@ -27,7 +27,7 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder) {
+	public List<BuildingEntity> findAll(BuildingSearch buildingSearch) {
 
 		// build SQL query
 		StringBuilder select = new StringBuilder("SELECT ");
@@ -35,9 +35,9 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 		StringBuilder columns = new StringBuilder("  b.* FROM building b ");
 		StringBuilder join = new StringBuilder();
 		StringBuilder where = new StringBuilder(" WHERE 1 = 1");
-		sqlWhereSimple(buildingSearchBuilder, where);
-		sqlWhereComplex(buildingSearchBuilder, where);
-		sqlJoin(buildingSearchBuilder, join);
+		sqlWhereSimple(buildingSearch, where);
+		sqlWhereComplex(buildingSearch, where);
+		sqlJoin(buildingSearch, join);
 		if (!StringUtil.isEmpty(join)) {
 			distinct.append(" DISTINCT ");
 		}
@@ -49,12 +49,12 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 				.getResultList();
 	}
 
-	private void sqlWhereSimple(BuildingSearchBuilder buildingSearchBuilder, StringBuilder where) {
-		for (Field field : BuildingSearchBuilder.class.getDeclaredFields()) {
+	private void sqlWhereSimple(BuildingSearch buildingSearch, StringBuilder where) {
+		for (Field field : BuildingSearch.class.getDeclaredFields()) {
 			try {
 				field.setAccessible(true);
 				String key = field.getName();
-				Object value = field.get(buildingSearchBuilder);
+				Object value = field.get(buildingSearch);
 				if (StringUtil.isEmpty(value)) {
 					continue;
 				}
@@ -73,39 +73,39 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 		}
 	}
 
-	private void sqlWhereComplex(BuildingSearchBuilder buildingSearchBuilder, StringBuilder where) {
-		if (!StringUtil.isEmpty(buildingSearchBuilder.getRentPriceFrom())) {
-			where.append(" AND b.rentprice >= " + buildingSearchBuilder.getRentPriceFrom());
+	private void sqlWhereComplex(BuildingSearch buildingSearch, StringBuilder where) {
+		if (!StringUtil.isEmpty(buildingSearch.getRentPriceFrom())) {
+			where.append(" AND b.rentprice >= " + buildingSearch.getRentPriceFrom());
 		}
 
-		if (!StringUtil.isEmpty(buildingSearchBuilder.getRentPriceTo())) {
-			where.append(" AND b.rentprice <= " + buildingSearchBuilder.getRentPriceTo());
+		if (!StringUtil.isEmpty(buildingSearch.getRentPriceTo())) {
+			where.append(" AND b.rentprice <= " + buildingSearch.getRentPriceTo());
 		}
 
-		if (!StringUtil.isEmpty(buildingSearchBuilder.getAreaFrom())) {
-			where.append(" AND ra.value >= " + buildingSearchBuilder.getAreaFrom());
+		if (!StringUtil.isEmpty(buildingSearch.getAreaFrom())) {
+			where.append(" AND ra.value >= " + buildingSearch.getAreaFrom());
 		}
 
-		if (!StringUtil.isEmpty(buildingSearchBuilder.getAreaTo())) {
-			where.append(" AND ra.value <= " + buildingSearchBuilder.getAreaTo());
+		if (!StringUtil.isEmpty(buildingSearch.getAreaTo())) {
+			where.append(" AND ra.value <= " + buildingSearch.getAreaTo());
 		}
 
-		if (StringUtil.usableTypeCode(buildingSearchBuilder.getTypeCodes())) {
-			List<String> trimmedList = buildingSearchBuilder.getTypeCodes().stream().map(str -> "'" + str.trim() + "'")
+		if (StringUtil.usableTypeCode(buildingSearch.getTypeCodes())) {
+			List<String> trimmedList = buildingSearch.getTypeCodes().stream().map(str -> "'" + str.trim() + "'")
 					.collect(Collectors.toList());
 			where.append(" AND rt.code IN (").append(String.join(", ", trimmedList)).append(") ");
 		}
 	}
 
-	private void sqlJoin(BuildingSearchBuilder buildingSearchBuilder, StringBuilder join) {
-		if (!StringUtil.isEmpty(buildingSearchBuilder.getStaffId())) {
+	private void sqlJoin(BuildingSearch buildingSearch, StringBuilder join) {
+		if (!StringUtil.isEmpty(buildingSearch.getStaffId())) {
 			join.append(" JOIN assignmentbuilding asb ON b.id = asb.buildingid");
 		}
-		if (!StringUtil.isEmpty(buildingSearchBuilder.getAreaFrom())
-				|| !StringUtil.isEmpty(buildingSearchBuilder.getAreaTo())) {
+		if (!StringUtil.isEmpty(buildingSearch.getAreaFrom())
+				|| !StringUtil.isEmpty(buildingSearch.getAreaTo())) {
 			join.append(" JOIN rentarea ra ON b.id = ra.buildingid");
 		}
-		if (StringUtil.usableTypeCode(buildingSearchBuilder.getTypeCodes())) {
+		if (StringUtil.usableTypeCode(buildingSearch.getTypeCodes())) {
 			join.append(" JOIN buildingrenttype brt ON brt.buildingid = b.id JOIN renttype rt ON brt.renttypeid = rt.id");
 		}
 	}

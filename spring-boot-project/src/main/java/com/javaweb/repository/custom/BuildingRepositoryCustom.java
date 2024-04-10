@@ -2,9 +2,9 @@ package com.javaweb.repository.custom;
 
 import java.util.List;
 
-import com.javaweb.builder.BuildingSearchBuilder;
+import com.javaweb.builder.BuildingSearch;
 import com.javaweb.repository.entity.BuildingEntity;
 
 public interface BuildingRepositoryCustom {
-	public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder);
+	public List<BuildingEntity> findAll(BuildingSearch buildingSearch);
 }

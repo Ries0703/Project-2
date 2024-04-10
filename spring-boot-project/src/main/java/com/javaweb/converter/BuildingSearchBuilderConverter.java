@@ -5,30 +5,29 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.javaweb.builder.BuildingSearchBuilder;
+import com.javaweb.builder.BuildingSearch;
 import com.javaweb.utils.MapUtil;
 
 @Component
 public class BuildingSearchBuilderConverter {
-	public BuildingSearchBuilder toBuildingSearchBuilder(Map<String, Object> params, List<String> typeCodes) {
-		return new BuildingSearchBuilder
-				.Builder()
-				.setName(MapUtil.getString(params.get("name")))
-				.setStreet(MapUtil.getString(params.get("street")))
-				.setWard(MapUtil.getString(params.get("ward")))
-				.setDistrictId(MapUtil.getLong(params.get("districtId")))
-				.setNumberOfBasement(MapUtil.getLong(params.get("numberOfBasement")))
-				.setFloorArea(MapUtil.getLong(params.get("floorArea")))
-				.setDirection(MapUtil.getString(params.get("direction")))
-				.setLevel(MapUtil.getString(params.get("level")))
-				.setAreaFrom(MapUtil.getLong(params.get("areaFrom")))
-				.setAreaTo(MapUtil.getLong(params.get("areaTo")))
-				.setRentPriceFrom(MapUtil.getLong(params.get("rentPriceFrom")))
-				.setRentPriceTo(MapUtil.getLong(params.get("rentPriceTo")))
-				.setManagerName(MapUtil.getString(params.get("managerName")))
-				.setManagerPhoneNumber(MapUtil.getString(params.get("managerPhoneNumber")))
-				.setStaffId(MapUtil.getLong(params.get("staffId")))
-				.setTypeCodes(typeCodes)
+	public BuildingSearch toBuildingSearchBuilder(Map<String, Object> params, List<String> typeCodes) {
+		return BuildingSearch.builder()
+				.name(MapUtil.getString(params.get("name")))
+				.street(MapUtil.getString(params.get("street")))
+				.ward(MapUtil.getString(params.get("ward")))
+				.districtId(MapUtil.getLong(params.get("districtId")))
+				.numberOfBasement(MapUtil.getLong(params.get("numberOfBasement")))
+				.floorArea(MapUtil.getLong(params.get("floorArea")))
+				.direction(MapUtil.getString(params.get("direction")))
+				.level(MapUtil.getString(params.get("level")))
+				.areaFrom(MapUtil.getLong(params.get("areaFrom")))
+				.areaTo(MapUtil.getLong(params.get("areaTo")))
+				.rentPriceFrom(MapUtil.getLong(params.get("rentPriceFrom")))
+				.rentPriceTo(MapUtil.getLong(params.get("rentPriceTo")))
+				.managerName(MapUtil.getString(params.get("managerName")))
+				.managerPhoneNumber(MapUtil.getString(params.get("managerPhoneNumber")))
+				.staffId(MapUtil.getLong(params.get("staffId")))
+				.typeCodes(typeCodes)
 				.build();
 	}
 }
