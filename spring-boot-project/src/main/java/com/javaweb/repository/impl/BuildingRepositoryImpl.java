@@ -74,16 +74,16 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		for (Field field : BuildingSearchBuilder.class.getDeclaredFields()) {
 			try {
 				field.setAccessible(true);
-				String fieldName = field.getName();
+				String key = field.getName();
 				Object value = field.get(buildingSearchBuilder);
 				if (StringUtil.isEmpty(value)) {
 					continue;
 				}
-				if (LIKE_FIELDS.contains(fieldName)) {
-					where.append("\n\tAND b." + fieldName + " LIKE '%" + value.toString().trim() + "%'");
-				} else if (EQUAL_FIELDS.contains(fieldName)) {
-					where.append("\n\tAND b." + fieldName + " = " + value);
-				} else if (STAFF_ID_FIELD.equals(fieldName)) {
+				if (LIKE_FIELDS.contains(key)) {
+					where.append("\n\tAND b." + key + " LIKE '%" + value.toString().trim() + "%'");
+				} else if (EQUAL_FIELDS.contains(key)) {
+					where.append("\n\tAND b." + key + " = " + value);
+				} else if (STAFF_ID_FIELD.equals(key)) {
 					where.append("\n\tAND asb.staffid = " + value);
 				}
 			} catch (IllegalArgumentException e) {
