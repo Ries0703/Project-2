@@ -74,7 +74,6 @@ public class BuildingEntity {
     @Column(name = "level")
     private String level;
 
-    @NotNull
     @Column(name = "rentprice", nullable = false)
     private Long rentPrice;
 

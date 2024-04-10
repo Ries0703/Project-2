@@ -42,6 +42,8 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 			distinct.append(" DISTINCT ");
 		}
 		StringBuilder sql = select.append(distinct).append(columns).append(join).append(where);
+		
+		// get results
 		Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
 		return query.getResultList();
 	}
