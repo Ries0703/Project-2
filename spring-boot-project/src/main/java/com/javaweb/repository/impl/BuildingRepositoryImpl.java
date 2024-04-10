@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +25,7 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<BuildingEntity> findAll(BuildingSearchBuilder buildingSearchBuilder) {
 
@@ -44,24 +44,25 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		StringBuilder sql = select.append(distinct).append(columns).append(join).append(where);
 		
 		// get results
-		Query query = entityManager.createNativeQuery(sql.toString(), BuildingEntity.class);
-		return query.getResultList();
+		return entityManager
+				.createNativeQuery(sql.toString(), BuildingEntity.class)
+				.getResultList();
 	}
 
 	private void sqlWhereSimple(BuildingSearchBuilder buildingSearchBuilder, StringBuilder where) {
 		for (Field field : BuildingSearchBuilder.class.getDeclaredFields()) {
 			try {
 				field.setAccessible(true);
-				String fieldName = field.getName();
+				String key = field.getName();
 				Object value = field.get(buildingSearchBuilder);
 				if (StringUtil.isEmpty(value)) {
 					continue;
 				}
-				if (LIKE_FIELDS.contains(fieldName)) {
-					where.append(" AND b." + fieldName + " LIKE '%" + value.toString().trim() + "%' ");
-				} else if (EQUAL_FIELDS.contains(fieldName)) {
-					where.append(" AND b." + fieldName + " = " + value);
-				} else if (STAFF_ID_FIELD.equals(fieldName)) {
+				if (LIKE_FIELDS.contains(key)) {
+					where.append(" AND b." + key + " LIKE '%" + value.toString().trim() + "%' ");
+				} else if (EQUAL_FIELDS.contains(key)) {
+					where.append(" AND b." + key + " = " + value);
+				} else if (STAFF_ID_FIELD.equals(key)) {
 					where.append(" AND asb.staffid = " + value);
 				}
 			} catch (IllegalArgumentException e) {
@@ -88,10 +89,11 @@ public class BuildingRepositoryImpl implements BuildingRepository {
 		if (!StringUtil.isEmpty(buildingSearchBuilder.getAreaTo())) {
 			where.append(" AND ra.value <= " + buildingSearchBuilder.getAreaTo());
 		}
-
-		if (StringUtil.usableTypeCode(buildingSearchBuilder.getTypeCodes())) {
-			List<String> trimmedList = buildingSearchBuilder.getTypeCodes().stream().map(str -> "'" + str.trim() + "'")
-					.collect(Collectors.toList());
+		List<String> typeCodes = buildingSearchBuilder.getTypeCodes();
+		if (StringUtil.usableTypeCode(typeCodes)) {
+			List<String> trimmedList = typeCodes.stream()
+												.map(str -> "'" + str.trim() + "'")
+												.collect(Collectors.toList());
 			where.append(" AND rt.code IN (").append(String.join(", ", trimmedList)).append(") ");
 		}
 	}

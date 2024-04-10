@@ -11,15 +11,16 @@ import com.javaweb.repository.entity.BuildingEntity;
 
 @Component
 public class BuildingConverter {
-	
+
 	@Autowired
 	private ModelMapper modelMapper;
 
 	public BuildingDTO entityToDto(BuildingEntity building) {
-		String address = String.join(", ", building.getStreet(), building.getWard(),
-				building.getDistrictEntity().getName().toString());
-		String rentArea = building.getRentAreaEntities().stream().map(o -> o.getValue().toString())
-				.collect(Collectors.joining(", "));
+		String address = String.join(", ", building.getStreet(), building.getWard(), building.getDistrictEntity().getName());
+		String rentArea = building.getRentAreaEntities()
+									.stream()
+									.map(o -> o.getValue().toString())
+									.collect(Collectors.joining(", "));
 
 		BuildingDTO dto = modelMapper.map(building, BuildingDTO.class);
 		dto.setAddress(address);
