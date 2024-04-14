@@ -1,4 +1,4 @@
-package com.javaweb.advice;
+package com.javaweb.exception;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
