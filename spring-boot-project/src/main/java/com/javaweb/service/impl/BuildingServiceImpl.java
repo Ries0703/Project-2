@@ -9,14 +9,16 @@ import org.springframework.stereotype.Service;
 
 import com.javaweb.converter.BuildingConverter;
 import com.javaweb.converter.BuildingSearchBuilderConverter;
-import com.javaweb.dto.request.BuildingRequestDto;
-import com.javaweb.dto.response.BuildingResponseDto;
+import com.javaweb.dto.request.BuildingRequest;
+import com.javaweb.dto.response.BuildingResponse;
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.service.BuildingService;
 
 @Service
 public class BuildingServiceImpl implements BuildingService {
-
+	public BuildingServiceImpl() {
+		System.out.println("BuildingServiceImpl created");
+	}
 	@Autowired
 	private BuildingRepository buildingRepository;
 	@Autowired
@@ -25,23 +27,22 @@ public class BuildingServiceImpl implements BuildingService {
 	private BuildingSearchBuilderConverter buildingSearchBuilderConverter;
 
 	@Override
-	public List<BuildingResponseDto> findAll(Map<String, Object> params, List<String> typeCodes) {
-		return buildingRepository
-				.findAll(buildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCodes))
-				.stream()
-				.map(buildingConverter::entityToResponseDto)
-				.collect(Collectors.toList());
+	public List<BuildingResponse> findAll(Map<String, Object> params, List<String> typeCodes) {
+		return buildingRepository.findAll(buildingSearchBuilderConverter.toBuildingSearchBuilder(params, typeCodes))
+		    .stream()
+		    .map(buildingConverter::entityToResponseDto)
+		    .collect(Collectors.toList());
 	}
 
 	@Override
-	public void addBuilding(BuildingRequestDto buildingRequestDto) {
-		buildingRepository.save(buildingConverter.requestDtoToEntity(buildingRequestDto));
+	public void addBuilding(BuildingRequest buildingRequest) {
+		buildingRepository.save(buildingConverter.requestDtoToEntity(buildingRequest));
 	}
 
 	@Override
 	public void removeBuilding(Long[] id) {
 		buildingRepository.deleteByIdIn(id);
-		
+
 	}
-	
+
 }

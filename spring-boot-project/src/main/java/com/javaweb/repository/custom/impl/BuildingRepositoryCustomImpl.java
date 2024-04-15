@@ -8,19 +8,20 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.springframework.stereotype.Repository;
-
 import com.javaweb.builder.BuildingSearch;
 import com.javaweb.repository.custom.BuildingRepositoryCustom;
 import com.javaweb.repository.entity.BuildingEntity;
 import com.javaweb.utils.StringUtil;
 
-@Repository
 public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 	private static final List<String> LIKE_FIELDS = Arrays.asList("name", "ward", "street", "direction", "level",
-			"managerName", "managerPhoneNumber");
+	                "managerName", "managerPhoneNumber");
 	private static final List<String> EQUAL_FIELDS = Arrays.asList("floorArea", "districtId", "numberOfBasement");
 	private static final String STAFF_ID_FIELD = "staffId";
+
+	public BuildingRepositoryCustomImpl() {
+		System.out.println("BuildingRepositoryCustomImpl created");
+	}
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -41,17 +42,20 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 		if (!StringUtil.isEmpty(join)) {
 			distinct.append(" DISTINCT ");
 		}
-		String sql = select.append(distinct).append(columns).append(join).append(where).toString();
-		
-		// get results 
-		return entityManager
-				.createNativeQuery(sql, BuildingEntity.class)
-				.getResultList();
+		String sql = select.append(distinct)
+		    .append(columns)
+		    .append(join)
+		    .append(where)
+		    .toString();
+
+		// get results
+		return entityManager.createNativeQuery(sql, BuildingEntity.class)
+		    .getResultList();
 	}
 
 	private void sqlWhereSimple(BuildingSearch buildingSearch, StringBuilder where) {
-		for (Field field : BuildingSearch.class.getDeclaredFields()) {
-			try {
+		try {
+			for (Field field : BuildingSearch.class.getDeclaredFields()) {
 				field.setAccessible(true);
 				String key = field.getName();
 				Object value = field.get(buildingSearch);
@@ -59,18 +63,20 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 					continue;
 				}
 				if (LIKE_FIELDS.contains(key)) {
-					where.append(" AND b." + key + " LIKE '%" + value.toString().trim() + "%' ");
+					where.append(" AND b." + key + " LIKE '%" + value.toString()
+					    .trim() + "%' ");
 				} else if (EQUAL_FIELDS.contains(key)) {
 					where.append(" AND b." + key + " = " + value);
 				} else if (STAFF_ID_FIELD.equals(key)) {
 					where.append(" AND asb.staffid = " + value);
 				}
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
 			}
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	private void sqlWhereComplex(BuildingSearch buildingSearch, StringBuilder where) {
@@ -91,9 +97,13 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 		}
 
 		if (StringUtil.usableTypeCode(buildingSearch.getTypeCodes())) {
-			List<String> trimmedList = buildingSearch.getTypeCodes().stream().map(str -> "'" + str.trim() + "'")
-					.collect(Collectors.toList());
-			where.append(" AND rt.code IN (").append(String.join(", ", trimmedList)).append(") ");
+			String type = buildingSearch.getTypeCodes()
+			    .stream()
+			    .map(str -> "'" + str.trim() + "'")
+			    .collect(Collectors.joining(", "));
+			where.append(" AND rt.code IN (")
+			    .append(type)
+			    .append(") ");
 		}
 	}
 
@@ -101,8 +111,7 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 		if (!StringUtil.isEmpty(buildingSearch.getStaffId())) {
 			join.append(" JOIN assignmentbuilding asb ON b.id = asb.buildingid");
 		}
-		if (!StringUtil.isEmpty(buildingSearch.getAreaFrom())
-				|| !StringUtil.isEmpty(buildingSearch.getAreaTo())) {
+		if (!StringUtil.isEmpty(buildingSearch.getAreaFrom()) || !StringUtil.isEmpty(buildingSearch.getAreaTo())) {
 			join.append(" JOIN rentarea ra ON b.id = ra.buildingid");
 		}
 		if (StringUtil.usableTypeCode(buildingSearch.getTypeCodes())) {
@@ -110,4 +119,3 @@ public class BuildingRepositoryCustomImpl implements BuildingRepositoryCustom {
 		}
 	}
 }
-
